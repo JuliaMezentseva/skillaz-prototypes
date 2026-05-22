@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <base href="/skillaz-prototypes/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Подведение итогов KPI — Петро Велт Технолоджис</title>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F7F8FA;
+    --surface: #FFFFFF;
+    --surface2: #F3F4F6;
+    --border: #EAECEF;
+    --border-med: #D5D8DE;
+    --text-primary: #1C1E24;
+    --text-secondary: #6B7280;
+    --text-tertiary: #9CA3AF;
+    --blue: #2563EB;
+    --blue-light: #EFF6FF;
+    --green: #16A34A;
+    --green-light: #F0FDF4;
+    --green-bar: #22C55E;
+    --amber: #B45309;
+    --amber-light: #FFFBEB;
+    --red: #DC2626;
+    --red-light: #FEF2F2;
+    --purple: #7C3AED;
+    --purple-light: #F5F3FF;
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  body {
+    font-family: 'Golos Text', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ---- LAYOUT ---- */
+  .shell { display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 10;
+  }
+  .sidebar-logo {
+    padding: 20px 16px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+  .sidebar-section { padding: 12px 8px 4px; font-size: 10px; color: var(--text-tertiary); letter-spacing: 0.06em; text-transform: uppercase; }
+  .nav-item {
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px 10px; margin: 1px 8px;
+    border-radius: var(--radius-md);
+    font-size: 13px; color: var(--text-secondary);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .nav-item:hover { background: var(--surface2); color: var(--text-primary); }
+  .nav-item.active { background: #EEEFF1; color: #1C1E24; font-weight: 500; }
+  .nav-icon { width: 16px; text-align: center; font-size: 14px; }
+  .sidebar-bottom { margin-top: auto; padding: 16px; border-top: 1px solid var(--border); }
+  .user-pill { display: flex; align-items: center; gap: 8px; }
+  .user-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--blue-light); color: var(--blue); font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+  .user-name { font-size: 12px; font-weight: 500; color: var(--text-primary); }
+  .user-role { font-size: 11px; color: var(--text-tertiary); }
+
+  /* MAIN */
+  .main { margin-left: 220px; flex: 1; }
+
+  /* TOPBAR */
+  .topbar {
+    position: sticky; top: 0; z-index: 9;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 28px;
+    height: 52px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .breadcrumb { font-size: 12px; color: var(--text-tertiary); }
+  .breadcrumb b { color: var(--text-primary); font-weight: 500; }
+  .topbar-actions { display: flex; gap: 8px; align-items: center; }
+  .tag { font-size: 11px; padding: 4px 12px; border-radius: 20px; background: #FFFBEB; color: #B45309; font-weight: 500; border: 1px solid #FDE68A; }
+
+  /* CONTENT */
+  .content { padding: 28px; max-width: 1000px; }
+
+  /* PAGE HEADER */
+  .page-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+  .page-title { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+  .page-sub { font-size: 13px; color: var(--text-secondary); margin-top: 3px; }
+  .period-tabs { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 3px; gap: 2px; }
+  .period-tab { font-size: 12px; padding: 5px 14px; border-radius: var(--radius-sm); cursor: pointer; color: var(--text-secondary); transition: all 0.15s; border: none; background: none; font-family: inherit; }
+  .period-tab.active { background: #1C1E24; color: #fff; font-weight: 600; border-radius: 20px; }
+
+  /* EMPLOYEE CARD */
+  .emp-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 20px;
+  }
+  .emp-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--blue-light); color: var(--blue); font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .emp-name { font-size: 15px; font-weight: 600; }
+  .emp-role { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .emp-meta { margin-left: auto; text-align: right; }
+  .emp-card-num { font-size: 12px; color: var(--text-secondary); }
+  .emp-period-label { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
+  /* METRICS */
+  .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+  .metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; }
+  .metric-label { font-size: 11px; color: var(--text-tertiary); margin-bottom: 6px; }
+  .metric-val { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+  .metric-sub { font-size: 11px; color: var(--text-tertiary); margin-top: 4px; }
+  .val-warn { color: #1C1E24; }
+  .val-ok { color: #16A34A; }
+  .val-blue { color: #1C1E24; }
+
+  /* KPI SECTIONS */
+  .kpi-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 12px; overflow: hidden; }
+  .kpi-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: background 0.12s;
+    border-bottom: 1px solid transparent;
+  }
+  .kpi-header:hover { background: var(--surface2); }
+  .kpi-header.open { border-bottom-color: var(--border); }
+  .kpi-header-left { display: flex; align-items: center; gap: 10px; }
+  .kpi-header-title { font-size: 14px; font-weight: 500; }
+  .badge { font-size: 11px; padding: 2px 9px; border-radius: 20px; }
+  .badge-blue { background: #EFF6FF; color: #2563EB; }
+  .badge-green { background: #F0FDF4; color: #16A34A; }
+  .badge-purple { background: #F5F3FF; color: #7C3AED; }
+  .kpi-header-right { display: flex; align-items: center; gap: 14px; }
+  .pct-summary { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
+  .chevron-btn { font-size: 11px; color: var(--text-tertiary); transition: transform 0.2s; display: inline-block; }
+  .chevron-btn.open { transform: rotate(180deg); }
+
+  /* TABLE */
+  .kpi-table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 11px; color: var(--text-tertiary); font-weight: 400; padding: 8px 18px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  th.r { text-align: right; }
+  td { font-size: 13px; padding: 11px 18px; border-bottom: 1px solid var(--border); color: var(--text-primary); vertical-align: middle; }
+  td.r { text-align: right; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #F9FAFB; }
+  .kpi-name-cell { font-size: 13px; font-weight: 500; }
+  .kpi-unit-cell { font-size: 11px; color: var(--text-tertiary); margin-top: 1px; }
+
+  /* PROGRESS */
+  .prog-wrap { display: flex; align-items: center; gap: 8px; }
+  .prog-bar { height: 6px; border-radius: 4px; background: #E5E7EB; flex: 1; min-width: 50px; overflow: hidden; }
+  .prog-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+  .fill-ok { background: #22C55E; }
+  .fill-warn { background: #22C55E; }
+  .fill-bad { background: #EF4444; }
+  .pct-num { font-size: 12px; font-weight: 600; min-width: 36px; text-align: right; }
+  .pct-ok { color: #1C1E24; }
+  .pct-warn { color: #1C1E24; }
+  .pct-bad { color: #DC2626; }
+
+
+
+  /* Q cells */
+  .q-ok { color: #1C1E24; }
+  .q-warn { color: #B45309; }
+  .q-bad { color: #DC2626; }
+
+  /* PREMIUM BLOCK */
+  .prem-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; margin-bottom: 20px; }
+  .prem-title { font-size: 14px; font-weight: 600; margin-bottom: 16px; }
+  .prem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+  .prem-item { background: var(--surface2); border-radius: var(--radius-md); padding: 13px 15px; }
+  .prem-item.accent { background: #F0FDF4; border: 1.5px solid #86EFAC; }
+  .prem-item-label { font-size: 11px; color: var(--text-tertiary); margin-bottom: 5px; }
+  .prem-item-val { font-size: 17px; font-weight: 600; }
+  .prem-item.accent .prem-item-val { color: #16A34A; }
+  .formula-row {
+    font-size: 12px; color: #6B7280;
+    background: #F3F4F6; border-radius: var(--radius-md);
+    padding: 12px 16px;
+    font-family: 'Golos Text', monospace;
+  }
+
+  /* ACTIONS */
+  .actions-row { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding-bottom: 40px; }
+  .status-tag { font-size: 12px; padding: 5px 13px; border-radius: 20px; background: #FFFBEB; color: #B45309; font-weight: 500; margin-right: 6px; border: 1px solid #FDE68A; }
+  .btn { font-size: 13px; padding: 8px 18px; border-radius: var(--radius-md); cursor: pointer; font-family: inherit; font-weight: 500; transition: all 0.15s; border: 1px solid var(--border-med); }
+  .btn-ghost { background: transparent; color: var(--text-secondary); }
+  .btn-ghost:hover { background: var(--surface2); color: var(--text-primary); }
+  .btn-outline { background: var(--surface); color: #DC2626; border-color: #FECACA; }
+  .btn-outline:hover { background: #FEF2F2; }
+  .btn-primary { background: #1C1E24; color: #fff; border-color: #1C1E24; border-radius: 20px; }
+  .btn-primary:hover { opacity: 0.88; }
+
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 100; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+  .modal { background: var(--surface); border-radius: var(--radius-lg); width: 460px; padding: 28px; position: relative; transform: translateY(10px); transition: transform 0.2s; }
+  .modal-overlay.show .modal { transform: translateY(0); }
+  .modal-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+  .modal-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 18px; }
+  .modal-close { position: absolute; top: 18px; right: 18px; font-size: 18px; cursor: pointer; color: var(--text-tertiary); background: none; border: none; font-family: inherit; line-height: 1; }
+  .modal-close:hover { color: var(--text-primary); }
+  textarea { width: 100%; height: 110px; border: 1px solid var(--border-med); border-radius: var(--radius-md); padding: 10px 12px; font-family: inherit; font-size: 13px; resize: none; outline: none; color: var(--text-primary); background: var(--bg); }
+  textarea:focus { border-color: var(--blue); }
+  .modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px; }
+
+  /* SUCCESS TOAST */
+  .toast { position: fixed; bottom: 28px; right: 28px; background: var(--text-primary); color: #fff; padding: 12px 20px; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; z-index: 200; transform: translateY(20px); opacity: 0; transition: all 0.25s; pointer-events: none; }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* COLLAPSE ANIMATION */
+  .collapsible { overflow: hidden; transition: max-height 0.3s ease, opacity 0.2s; max-height: 0; opacity: 0; }
+  .collapsible.open { max-height: 600px; opacity: 1; }
+
+  /* REJECT MODAL */
+  .reason-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .reason-opt { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-md); cursor: pointer; font-size: 13px; transition: all 0.15s; }
+  .reason-opt:hover { border-color: var(--border-med); background: var(--surface2); }
+  .reason-opt.selected { border-color: var(--blue); background: var(--blue-light); color: var(--blue); }
+  .reason-opt input { display: none; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">Skillaz</div>
+
+    <div class="sidebar-section">Главное</div>
+    <div class="nav-item"><span class="nav-icon">◻</span> Дашборд</div>
+    <div class="nav-item"><span class="nav-icon">◫</span> Мои задачи</div>
+
+    <div class="sidebar-section">Цели и KPI</div>
+    <div class="nav-item"><span class="nav-icon">⊞</span> Банк KPI</div>
+    <div class="nav-item active"><span class="nav-icon">✓</span> Подведение итогов</div>
+
+    <div class="sidebar-section">Отчёты</div>
+    <div class="nav-item"><span class="nav-icon">↗</span> Аналитика</div>
+    <div class="nav-item"><span class="nav-icon">⤓</span> Выгрузки</div>
+
+    <div class="sidebar-section">Администрирование</div>
+    <div class="nav-item"><span class="nav-icon">⚙</span> Настройки</div>
+
+    <div class="sidebar-bottom">
+      <div class="user-pill">
+        <div class="user-avatar">ИП</div>
+        <div>
+          <div class="user-name">Иванова П.С.</div>
+          <div class="user-role">HR-администратор</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="breadcrumb">Подведение итогов → <b>Антонов С.В.</b></div>
+      <div class="topbar-actions">
+        <span class="tag">Ожидает утверждения</span>
+        <button class="btn btn-ghost" onclick="showToast('PDF скачан')">⤓ Скачать PDF</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-head">
+        <div>
+          <div class="page-title">Подведение итогов года</div>
+          <div class="page-sub">Утверждение результатов и расчёт годовой премии</div>
+        </div>
+        <div class="period-tabs">
+          <button class="period-tab" onclick="setYear(this,'2022')">2022</button>
+          <button class="period-tab" onclick="setYear(this,'2023')">2023</button>
+          <button class="period-tab active" onclick="setYear(this,'2024')">2024</button>
+        </div>
+      </div>
+
+      <!-- EMPLOYEE -->
+      <div class="emp-card">
+        <div class="emp-avatar">АС</div>
+        <div>
+          <div class="emp-name">Антонов Сергей Владимирович</div>
+          <div class="emp-role">Директор по производству · ООО «Северные технологии»</div>
+        </div>
+        <div class="emp-meta">
+          <div class="emp-card-num">Форма эффективности</div>
+          <div class="emp-period-label">1 января — 31 декабря 2024</div>
+        </div>
+      </div>
+
+      <!-- METRICS -->
+      <div class="metrics-grid">
+        <div class="metric-card" style="background:#fff;border-color:#E5E7EB;">
+          <div class="metric-label" style="color:#6B7280;">Индекс результативности</div>
+          <div class="metric-val" style="color:#16A34A;">81.4%</div>
+          <div class="metric-sub" style="color:#9CA3AF;">из 100%</div>
+        </div>
+        <div class="metric-card" style="background:#fff;border-color:#E5E7EB;">
+          <div class="metric-label" style="color:#6B7280;">Дельта от прошлого года</div>
+          <div class="metric-val" style="color:#1C1E24;">+4.2%</div>
+          <div class="metric-sub" style="color:#9CA3AF;">2023: 77.2%</div>
+        </div>
+        <div class="metric-card" style="background:#fff;border-color:#E5E7EB;">
+          <div class="metric-label" style="color:#6B7280;">Базовая премия</div>
+          <div class="metric-val" style="color:#2563EB;">40%</div>
+          <div class="metric-sub" style="color:#9CA3AF;">от ФОТ</div>
+        </div>
+        <div class="metric-card" style="background:#fff;border-color:#E5E7EB;">
+          <div class="metric-label" style="color:#6B7280;">Сумма к выплате</div>
+          <div class="metric-val" style="color:#16A34A;">976 800 ₽</div>
+          <div class="metric-sub" style="color:#9CA3AF;">ФОТ: 3 000 000 ₽</div>
+        </div>
+      </div>
+
+      <!-- ГОДОВЫЕ KPI/Цели -->
+      <div class="kpi-block">
+        <div class="kpi-header open" id="h-year" onclick="toggleSection('year')">
+          <div class="kpi-header-left">
+            <div style="width:8px;height:8px;border-radius:50%;background:#378ADD;flex-shrink:0"></div>
+            <div class="kpi-header-title">Годовые KPI и Цели</div>
+            <span class="badge badge-blue">вес 60%</span>
+          </div>
+          <div class="kpi-header-right">
+            <span class="pct-summary">78% исполнения</span>
+            <span class="chevron-btn open" id="ch-year">▾</span>
+          </div>
+        </div>
+        <div class="collapsible open" id="s-year">
+          <div class="kpi-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:30%">Показатель</th>
+                  <th class="r">Исходное</th>
+                  <th class="r">Цель</th>
+                  <th class="r">Факт</th>
+                  <th style="width:20%">Прогресс</th>
+                  <th class="r">Вес</th>
+                  <th class="r">Взвешенный</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="kpi-name-cell">Выручка компании</div><div class="kpi-unit-cell">млн руб.</div></td>
+                  <td class="r">820</td>
+                  <td class="r">1 200</td>
+                  <td class="r">1 140</td>
+                  <td>
+                    <div class="prog-wrap">
+                      <div class="prog-bar"><div class="prog-fill fill-warn" style="width:83%"></div></div>
+                      <span class="pct-num pct-warn">83%</span>
+                    </div>
+                  </td>
+                  <td class="r">25%</td>
+                  <td class="r">20.8%</td>
+                </tr>
+                <tr>
+                  <td><div class="kpi-name-cell">EBITDA</div><div class="kpi-unit-cell">млн руб.</div></td>
+                  <td class="r">—</td>
+                  <td class="r">180</td>
+                  <td class="r">196</td>
+                  <td>
+                    <div class="prog-wrap">
+                      <div class="prog-bar"><div class="prog-fill fill-ok" style="width:100%"></div></div>
+                      <span class="pct-num pct-ok">109%</span>
+                    </div>
+                  </td>
+                  <td class="r">20%</td>
+                  <td class="r">20.0%</td>
+                </tr>
+                <tr>
+                  <td><div class="kpi-name-cell">Стратегический проект «Цифровизация»</div><div class="kpi-unit-cell">% готовности</div></td>
+                  <td class="r">0%</td>
+                  <td class="r">100%</td>
+                  <td class="r">70%</td>
+                  <td>
+                    <div class="prog-wrap">
+                      <div class="prog-bar"><div class="prog-fill fill-warn" style="width:70%"></div></div>
+                      <span class="pct-num pct-warn">70%</span>
+                    </div>
+                  </td>
+                  <td class="r">15%</td>
+                  <td class="r">10.5%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- КВАРТАЛЬНЫЕ KPI/Цели -->
+      <div class="kpi-block">
+        <div class="kpi-header open" id="h-quarter" onclick="toggleSection('quarter')">
+          <div class="kpi-header-left">
+            <div style="width:8px;height:8px;border-radius:50%;background:#1D9E75;flex-shrink:0"></div>
+            <div class="kpi-header-title">Квартальные KPI и Цели</div>
+            <span class="badge badge-green">вес 30%</span>
+          </div>
+          <div class="kpi-header-right">
+            <span class="pct-summary">88% исполнения</span>
+            <span class="chevron-btn open" id="ch-quarter">▾</span>
+          </div>
+        </div>
+        <div class="collapsible open" id="s-quarter">
+          <div class="kpi-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:30%">Показатель</th>
+                  <th class="r">Q1</th>
+                  <th class="r">Q2</th>
+                  <th class="r">Q3</th>
+                  <th class="r">Q4</th>
+                  <th style="width:20%">Итог</th>
+                  <th class="r">Вес</th>
+                  <th class="r">Взвешенный</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="kpi-name-cell">Сдача проектов в срок</div><div class="kpi-unit-cell">% от плана (цель ≥ 90%)</div></td>
+                  <td class="r q-ok">94%</td>
+                  <td class="r q-ok">96%</td>
+                  <td class="r q-warn">81%</td>
+                  <td class="r q-ok">91%</td>
+                  <td>
+                    <div class="prog-wrap">
+                      <div class="prog-bar"><div class="prog-fill fill-warn" style="width:86%"></div></div>
+                      <span class="pct-num pct-warn">86%</span>
+                    </div>
+                  </td>
+                  <td class="r">15%</td>
+                  <td class="r">12.9%</td>
+                </tr>
+                <tr>
+                  <td><div class="kpi-name-cell">Доля непроизводительного времени</div><div class="kpi-unit-cell">% (цель ≤ 8%)</div></td>
+                  <td class="r q-ok">5.2%</td>
+                  <td class="r q-ok">6.1%</td>
+                  <td class="r q-ok">7.4%</td>
+                  <td class="r q-warn">9.3%</td>
+                  <td>
+                    <div class="prog-wrap">
+                      <div class="prog-bar"><div class="prog-fill fill-warn" style="width:82%"></div></div>
+                      <span class="pct-num pct-warn">82%</span>
+                    </div>
+                  </td>
+                  <td class="r">15%</td>
+                  <td class="r">12.3%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ЕЖЕМЕСЯЧНЫЕ KPI/Цели -->
+      <div class="kpi-block">
+        <div class="kpi-header" id="h-month" onclick="toggleSection('month')">
+          <div class="kpi-header-left">
+            <div style="width:8px;height:8px;border-radius:50%;background:#7F77DD;flex-shrink:0"></div>
+            <div class="kpi-header-title">Ежемесячные KPI и Цели</div>
+            <span class="badge badge-purple">вес 10%</span>
+          </div>
+          <div class="kpi-header-right">
+            <span class="pct-summary">92% исполнения</span>
+            <span class="chevron-btn" id="ch-month">▾</span>
+          </div>
+        </div>
+        <div class="collapsible" id="s-month">
+          <div class="kpi-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:30%">Показатель</th>
+                  <th class="r">Выполнено мес.</th>
+                  <th class="r">Ср. факт</th>
+                  <th class="r">Цель</th>
+                  <th style="width:20%">Прогресс</th>
+                  <th class="r">Вес</th>
+                  <th class="r">Взвешенный</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="kpi-name-cell">Выполнение производственного плана</div><div class="kpi-unit-cell">% от месячного плана</div></td>
+                  <td class="r">11 / 12</td>
+                  <td class="r">97%</td>
+                  <td class="r">100%</td>
+                  <td>
+                    <div class="prog-wrap">
+                      <div class="prog-bar"><div class="prog-fill fill-ok" style="width:92%"></div></div>
+                      <span class="pct-num pct-ok">92%</span>
+                    </div>
+                  </td>
+                  <td class="r">10%</td>
+                  <td class="r">9.2%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="prem-block">
+        <div class="prem-title">Расчёт годовой премии</div>
+        <div class="prem-grid">
+          <div class="prem-item">
+            <div class="prem-item-label">Годовой ФОТ</div>
+            <div class="prem-item-val">3 000 000 ₽</div>
+          </div>
+          <div class="prem-item">
+            <div class="prem-item-label">Базовая премия</div>
+            <div class="prem-item-val">40%</div>
+          </div>
+          <div class="prem-item">
+            <div class="prem-item-label">Сумма премии</div>
+            <div class="prem-item-val">1 200 000 ₽</div>
+          </div>
+          <div class="prem-item">
+            <div class="prem-item-label">% результативности</div>
+            <div class="prem-item-val">81.4%</div>
+          </div>
+          <div class="prem-item">
+            <div class="prem-item-label">Коэффициент результативности</div>
+            <div class="prem-item-val">× 0.814</div>
+          </div>
+          <div class="prem-item accent">
+            <div class="prem-item-label">Итого к выплате</div>
+            <div class="prem-item-val">976 800 ₽</div>
+          </div>
+        </div>
+        <div class="formula-row">
+          Формула: 3 000 000 × 40% × 81.4% = <b style="color:#1C1E24;">976 800 ₽</b>
+        </div>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="actions-row">
+        <button class="btn btn-ghost" onclick="openModal('comment')">Добавить комментарий</button>
+        <button class="btn btn-outline" onclick="openModal('reject')">Требуется доработка</button>
+        <button class="btn btn-primary" onclick="openModal('confirm')">Утвердить итоги</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMMENT MODAL -->
+<div class="modal-overlay" id="modal-comment">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('comment')">✕</button>
+    <div class="modal-title">Комментарий к итогам</div>
+    <div class="modal-sub">Комментарий будет сохранён в карте KPI и виден сотруднику</div>
+    <textarea placeholder="Введите комментарий..."></textarea>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('comment')">Отмена</button>
+      <button class="btn btn-primary" onclick="closeModal('comment');showToast('Комментарий сохранён')">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- REJECT MODAL -->
+<div class="modal-overlay" id="modal-reject">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('reject')">✕</button>
+    <div class="modal-title">Требуется доработка</div>
+    <div class="modal-sub">Выберите причину и при необходимости добавьте комментарий</div>
+    <div class="reason-list">
+      <label class="reason-opt" onclick="selectReason(this)"><input type="radio" name="reason">Некорректные фактические данные</label>
+      <label class="reason-opt" onclick="selectReason(this)"><input type="radio" name="reason">Требуется уточнение по показателю</label>
+      <label class="reason-opt" onclick="selectReason(this)"><input type="radio" name="reason">Ошибка в расчёте веса</label>
+      <label class="reason-opt" onclick="selectReason(this)"><input type="radio" name="reason">Другое</label>
+    </div>
+    <textarea placeholder="Дополнительный комментарий (необязательно)..."></textarea>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('reject')">Отмена</button>
+      <button class="btn btn-outline" onclick="closeModal('reject');showToast('Отправлено на доработку — уведомление направлено')">Отправить на доработку</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="modal-confirm">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('confirm')">✕</button>
+    <div class="modal-title">Утвердить итоги KPI</div>
+    <div class="modal-sub">Вы подтверждаете результаты формы эффективности и сумму премии к выплате 976 800 ₽?</div>
+    <div style="background:#F0FDF4;border-radius:var(--radius-md);padding:14px 16px;font-size:13px;color:#16A34A;margin-bottom:6px;border:1px solid #86EFAC;">
+      После утверждения данные будут переданы в систему премирования. Действие необратимо.
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('confirm')">Отмена</button>
+      <button class="btn btn-primary" onclick="confirmApprove()">Утвердить</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  function toggleSection(id) {
+    const s = document.getElementById('s-' + id);
+    const h = document.getElementById('h-' + id);
+    const ch = document.getElementById('ch-' + id);
+    s.classList.toggle('open');
+    h.classList.toggle('open');
+    ch.classList.toggle('open');
+  }
+
+  function setYear(btn, year) {
+    document.querySelectorAll('.period-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    showToast('Данные за ' + year + ' год');
+  }
+
+  function openModal(id) {
+    document.getElementById('modal-' + id).classList.add('show');
+  }
+
+  function closeModal(id) {
+    document.getElementById('modal-' + id).classList.remove('show');
+  }
+
+  function selectReason(el) {
+    document.querySelectorAll('.reason-opt').forEach(r => r.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function confirmApprove() {
+    closeModal('confirm');
+    document.querySelector('.status-tag').textContent = 'Утверждено';
+    document.querySelector('.status-tag').style.background = '#F0FDF4';
+    document.querySelector('.status-tag').style.color = '#16A34A';
+    document.querySelector('.status-tag').style.borderColor = '#86EFAC';
+    document.querySelector('.topbar-actions .tag').textContent = 'Утверждено';
+    document.querySelector('.topbar-actions .tag').style.background = '#F0FDF4';
+    document.querySelector('.topbar-actions .tag').style.color = '#16A34A';
+    document.querySelector('.topbar-actions .tag').style.borderColor = '#86EFAC';
+    document.querySelectorAll('.btn-outline, .btn-primary').forEach(b => b.disabled = true);
+    showToast('Итоги утверждены — данные переданы в систему премирования');
+  }
+
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.classList.remove('show');
+      }
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <base href="/skillaz-prototypes/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Performance Review — Сотрудник</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f8f7f4;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.08);
+    --border-md: rgba(0,0,0,0.13);
+    --text: #1a1a18;
+    --text-2: #6b6b65;
+    --text-3: #a0a09a;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+  }
+  body { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: var(--text); background: var(--bg); line-height: 1.5; }
+
+  .page-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 32px; display: flex; align-items: center; gap: 20px; height: 52px; }
+  .page-title { font-size: 14px; font-weight: 600; }
+  .page-meta { font-size: 12px; color: var(--text-2); }
+  .spacer { flex: 1; }
+  .deadline-chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; background: #faeeda; color: #633806; border-radius: 20px; font-size: 11px; font-weight: 500; }
+  .deadline-dot { width: 6px; height: 6px; border-radius: 50%; background: #ef9f27; }
+
+  .container { max-width: 860px; margin: 0 auto; padding: 28px 32px; }
+
+  /* PROCESS STEPPER */
+  .stepper { display: flex; align-items: center; gap: 0; margin-bottom: 32px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 20px; }
+  .step { display: flex; align-items: center; gap: 8px; flex: 1; }
+  .step-num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
+  .step-num-done { background: #eaf3de; color: #27500a; }
+  .step-num-active { background: var(--text); color: var(--surface); }
+  .step-num-future { background: var(--bg); color: var(--text-3); border: 1px solid var(--border); }
+  .step-label { font-size: 11px; font-weight: 500; }
+  .step-label-active { color: var(--text); }
+  .step-label-done { color: #27500a; }
+  .step-label-future { color: var(--text-3); }
+  .step-arrow { color: var(--border-md); margin: 0 6px; font-size: 14px; flex-shrink: 0; }
+
+  .section-title { font-size: 11px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 12px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 16px; }
+  .card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .card-sub { font-size: 12px; color: var(--text-2); margin-bottom: 16px; }
+
+  .badge { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge-A { background: #eaf3de; color: #27500a; }
+  .badge-B { background: #e6f1fb; color: #0c447c; }
+  .badge-C { background: #faeeda; color: #633806; }
+  .badge-D { background: #fcebeb; color: #a32d2d; }
+  .badge-none { background: #f1efe8; color: var(--text-3); border: 1px solid var(--border); }
+
+  /* GOAL CARD */
+  .goal-card { border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; margin-bottom: 12px; background: var(--surface); transition: border-color .15s; }
+  .goal-card.filled { border-color: rgba(0,0,0,0.13); }
+  .goal-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; gap: 12px; }
+  .goal-name { font-size: 13px; font-weight: 500; }
+  .goal-kpi-label { font-size: 10px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: .4px; margin: 0 0 4px; }
+  .goal-kpi-val { font-size: 12px; color: var(--text-2); margin-bottom: 10px; }
+  .goal-weight-badge { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 500; background: var(--bg); color: var(--text-2); border: 1px solid var(--border); flex-shrink: 0; }
+
+  .kpi-input { width: 100%; padding: 8px 12px; border: 1px solid var(--border-md); border-radius: var(--radius-sm); font-size: 12px; font-family: inherit; color: var(--text); background: var(--surface); }
+  .kpi-input:focus { outline: none; border-color: #85b7eb; }
+  .kpi-input::placeholder { color: var(--text-3); }
+
+  .scale-label { font-size: 10px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: .4px; margin: 12px 0 8px; }
+  .scale-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .scale-btn { border: 1px solid var(--border-md); background: var(--surface); padding: 7px 14px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 500; cursor: pointer; transition: all .12s; color: var(--text-2); display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+  .scale-btn-letter { font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .scale-btn-hint { font-size: 12px; font-weight: 400; color: var(--text-3); }
+  .scale-btn:hover { background: var(--bg); }
+  .scale-btn.sel-A { background: #eaf3de; border-color: #97c459; color: #27500a; }
+  .scale-btn.sel-A .scale-btn-hint { color: #639922; }
+  .scale-btn.sel-B { background: #e6f1fb; border-color: #85b7eb; color: #0c447c; }
+  .scale-btn.sel-B .scale-btn-hint { color: #185fa5; }
+  .scale-btn.sel-C { background: #faeeda; border-color: #ef9f27; color: #633806; }
+  .scale-btn.sel-C .scale-btn-hint { color: #854f0b; }
+  .scale-btn.sel-D { background: #fcebeb; border-color: #f09595; color: #a32d2d; }
+  .scale-btn.sel-D .scale-btn-hint { color: #a32d2d; }
+
+  .comp-section { margin-top: 20px; }
+  .comp-label { font-size: 10px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 8px; }
+  .comp-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .comp-tag { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 11px; border: 1px solid var(--border-md); background: var(--surface); cursor: pointer; transition: all .12s; color: var(--text-2); }
+  .comp-tag:hover { background: var(--bg); }
+  .comp-tag.selected { background: #1a1a18; border-color: #1a1a18; color: #fff; }
+  .acc-header { display:flex; align-items:center; justify-content:space-between; padding:10px 18px; cursor:pointer; user-select:none; }
+  .acc-header:hover { background: var(--bg); }
+  .acc-chevron { transition: transform .2s; flex-shrink:0; }
+  .acc-chevron.open { transform: rotate(180deg); }
+  .acc-body { overflow: hidden; }
+  .acc-body.closed { display: none; }
+  .comp-tag-x { font-size: 12px; line-height: 1; }
+
+  textarea { width: 100%; padding: 8px 12px; border: 1px solid var(--border-md); border-radius: var(--radius-sm); font-size: 12px; font-family: inherit; color: var(--text); background: var(--surface); resize: none; min-height: 60px; line-height: 1.5; margin-top: 8px; }
+  textarea:focus { outline: none; border-color: #85b7eb; }
+  textarea::placeholder { color: var(--text-3); }
+
+  .progress-bar-wrap { height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; margin: 0 0 6px; }
+  .progress-bar { height: 7px; border-radius: 4px; background: #378add; transition: width .3s; }
+  .progress-label { font-size: 11px; color: var(--text-2); }
+
+  .action-bar { display: flex; gap: 8px; margin-top: 20px; align-items: center; }
+  .btn { padding: 9px 20px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border-md); background: var(--surface); color: var(--text); transition: all .12s; }
+  .btn:hover { background: var(--bg); }
+  .btn-primary { background: var(--text); color: var(--surface); border-color: var(--text); }
+  .btn-primary:hover { opacity: .85; }
+  .btn-primary:disabled { opacity: .35; cursor: not-allowed; }
+  .btn-sm { padding: 6px 14px; font-size: 12px; }
+
+  .warning-text { font-size: 11px; color: #854f0b; margin-left: 4px; }
+
+  /* RESULTS VIEW (after publish) */
+  .result-hero { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px 32px; margin-bottom: 16px; text-align: center; }
+  .result-rating { font-size: 64px; font-weight: 700; line-height: 1; }
+  .result-rating-label { font-size: 18px; font-weight: 500; margin-top: 6px; }
+  .result-sub { font-size: 13px; color: var(--text-2); margin-top: 6px; }
+  .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  .result-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 22px; }
+  .result-card-label { font-size: 11px; color: var(--text-2); font-weight: 500; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 8px; }
+  .result-card-val { font-size: 24px; font-weight: 700; }
+  .result-card-sub { font-size: 12px; color: var(--text-2); margin-top: 4px; }
+  .feedback-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 22px; margin-bottom: 16px; }
+  .feedback-text { font-size: 13px; color: var(--text-2); line-height: 1.7; font-style: italic; }
+
+  .info-banner { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #eaf3de; border-radius: var(--radius-md); font-size: 12px; color: #27500a; margin-bottom: 20px; border: 1px solid #97c459; }
+  .info-banner-icon { font-size: 16px; flex-shrink: 0; }
+  .wait-banner { background: #faeeda; color: #633806; border-color: #ef9f27; }
+
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--text); color: var(--surface); padding: 10px 18px; border-radius: var(--radius-md); font-size: 12px; font-weight: 500; z-index: 200; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+
+  /* VIEW SWITCHER (demo) */
+  .view-switcher { display: flex; gap: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 24px; }
+  .view-btn { flex: 1; padding: 8px 16px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; background: transparent; color: var(--text-2); transition: all .12s; }
+  .view-btn.active { background: var(--text); color: var(--surface); }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- DEMO VIEW SWITCHER -->
+  <div style="margin-bottom:20px">
+    <div style="font-size:11px;color:var(--text-3);margin-bottom:6px;font-weight:500">Демо: выберите состояние экрана</div>
+    <div class="view-switcher" style="max-width:520px">
+      <button class="view-btn active" onclick="setView('self')">Самооценка (в процессе)</button>
+      <button class="view-btn" onclick="setView('sent')">Отправлено, ожидание</button>
+      <button class="view-btn" onclick="setView('calibration')">Калибровка</button>
+      <button class="view-btn" onclick="setView('results')">Результаты опубликованы</button>
+    </div>
+  </div>
+
+  <!-- REVIEW HEADER -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <div>
+      <div style="font-size:17px;font-weight:600;color:var(--text);margin-bottom:2px">Performance Review</div>
+      <div style="font-size:12px;color:var(--text-2)">Период: январь — декабрь 2024</div>
+    </div>
+    <span id="header-chip" style="display:inline-flex;align-items:center;gap:6px;padding:7px 18px;background:#faeeda;color:#633806;border-radius:20px;font-size:13px;font-weight:500">Этап самооценки · осталось 15 дней</span>
+  </div>
+
+  <!-- STEPPER -->
+  <div class="stepper" id="stepper"></div>
+
+  <!-- MAIN CONTENT -->
+  <div id="main-content"></div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const COMPETENCIES = [
+  'Ориентация на результат','Командная работа','Коммуникация',
+  'Стратегическое мышление','Клиентоориентированность','Инициативность',
+  'Адаптивность','Управление временем',
+];
+
+const goals = [
+  {id:0, name:"Запуск нового продукта на рынок", kpi_plan:"Релиз до 31.10.2024", weight:40, kpi_fact:"Релиз выполнен 15 октября — на 2 недели раньше срока, без критических багов", score:null, comps:[], justification:""},
+  {id:1, name:"Снижение времени деплоя сервисов", kpi_plan:"Сокращение на 30%", weight:35, kpi_fact:"Достигнуто снижение на 22% — цель частично выполнена", score:null, comps:[], justification:""},
+  {id:2, name:"Менторство и развитие junior-разработчиков", kpi_plan:"4 встречи в месяц", weight:25, kpi_fact:"Проведено 4–5 встреч ежемесячно, оба junior прошли испытательный срок досрочно", score:null, comps:[], justification:""},
+];
+
+const SCALE = [
+  {val:'A', hint:'Исключительный'},
+  {val:'B', hint:'Выше ожиданий'},
+  {val:'C', hint:'Так держать'},
+  {val:'D', hint:'Требует развития'},
+];
+
+const RATING_LABELS = {A:'Исключительный',B:'Выше ожиданий',C:'Так держать',D:'Требует развития'};
+
+let currentView = 'self';
+
+const steps_self = [
+  {label:'Самооценка', status:'active'},
+  {label:'Оценка руководителя', status:'future'},
+  {label:'Калибровка', status:'future'},
+  {label:'Результаты', status:'future'},
+];
+const steps_sent = [
+  {label:'Самооценка', status:'done'},
+  {label:'Оценка руководителя', status:'active'},
+  {label:'Калибровка', status:'future'},
+  {label:'Результаты', status:'future'},
+];
+const steps_calibration = [
+  {label:'Самооценка', status:'done'},
+  {label:'Оценка руководителя', status:'done'},
+  {label:'Калибровка', status:'active'},
+  {label:'Результаты', status:'future'},
+];
+const steps_results = [
+  {label:'Самооценка', status:'done'},
+  {label:'Оценка руководителя', status:'done'},
+  {label:'Калибровка', status:'done'},
+  {label:'Результаты', status:'active'},
+];
+
+function setView(v) {
+  currentView = v;
+  document.querySelectorAll('.view-btn').forEach((b,i) => {
+    b.classList.toggle('active', ['self','sent','results'][i] === v);
+  });
+  const chip = document.getElementById('header-chip');
+  if (chip) {
+    if (v === 'results') {
+      chip.style.background = '#eaf3de';
+      chip.style.color = '#27500a';
+      chip.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7L5.5 10L11.5 4" stroke="#27500a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Руководитель опубликовал ваши результаты';
+    } else {
+      chip.style.background = '#faeeda';
+      chip.style.color = '#633806';
+      chip.innerHTML = 'Этап самооценки · осталось 15 дней';
+    }
+  }
+  render();
+}
+
+function renderStepper(steps) {
+  document.getElementById('stepper').innerHTML = steps.map((s,i) => {
+    const numClass = s.status==='done'?'step-num-done':s.status==='active'?'step-num-active':'step-num-future';
+    const lblClass = s.status==='done'?'step-label-done':s.status==='active'?'step-label-active':'step-label-future';
+    const numContent = s.status==='done' ? '✓' : (i+1);
+    const arrow = i < steps.length-1 ? '<span class="step-arrow">›</span>' : '';
+    return '<div class="step"><div class="step-num ' + numClass + '">' + numContent + '</div><div class="step-label ' + lblClass + '">' + s.label + '</div></div>' + arrow;
+  }).join('');
+}
+
+function filledCount() { return goals.filter(g => g.score !== null && g.kpi_fact.trim() !== '').length; }
+
+function render() {
+  const content = document.getElementById('main-content');
+
+  if (currentView === 'self') {
+    renderStepper(steps_self);
+    const filled = filledCount();
+    const total = goals.length;
+    const pct = Math.round((filled/total)*100);
+    const canSubmit = filled === total;
+
+    content.innerHTML = `
+      <div class="card">
+        <div class="card-title" style="margin-bottom:12px">Самооценка по целям</div>
+        <div class="progress-bar-wrap"><div class="progress-bar" id="pbar" style="width:${pct}%"></div></div>
+        <div class="progress-label">Заполнено ${filled} из ${total} целей</div>
+      </div>
+      <div id="goals-list">${renderGoals()}</div>
+      <div class="action-bar">
+        <button class="btn btn-primary" ${canSubmit?'':'disabled'} onclick="submitForm()">Отправить на согласование</button>
+        ${!canSubmit ? '<span class="warning-text">Заполните все ' + (total-filled) + ' оставшихся цели</span>' : ''}
+      </div>
+    `;
+  }
+
+  if (currentView === 'sent') {
+    renderStepper(steps_sent);
+    const goalsHtml = goals.map((g,i) => {
+      const isLast = i === goals.length-1;
+      const badgeHtml = g.score ? '<span class="badge badge-' + g.score + '">' + g.score + '</span>' : '<span class="badge badge-none">—</span>';
+      const factHtml = g.kpi_fact ? g.kpi_fact : '<span style="color:var(--text-3);font-style:italic">Факт не указан</span>';
+      return '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px 0;' + (isLast?'':'border-bottom:0.5px solid var(--border)') + '">'
+        + '<div style="flex:1;min-width:0">'
+        + '<div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:3px">' + g.name + '</div>'
+        + '<div style="font-size:11px;color:var(--text-2);line-height:1.4">' + factHtml + '</div>'
+        + '</div>'
+        + '<div style="display:flex;align-items:center;gap:8px;flex-shrink:0">'
+        + '<span style="padding:2px 8px;border-radius:20px;font-size:11px;background:#f1efe8;color:#5f5e5a">' + g.weight + '%</span>'
+        + badgeHtml
+        + '</div>'
+        + '</div>';
+    }).join('');
+
+    content.innerHTML = `
+      <div class="card" style="padding:20px 22px">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div style="width:38px;height:38px;border-radius:50%;background:var(--bg);border:1px solid var(--border-md);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="var(--text-3)" stroke-width="1.3"/><path d="M8 4.5v3.5l2 1.5" stroke="var(--text-3)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">Руководитель проводит вашу оценку</div>
+            <div style="font-size:12px;color:var(--text-2);line-height:1.6;margin-bottom:12px">А. Петрова оценивает ваши результаты за год. Вы получите уведомление, когда оценка будет завершена.</div>
+            <div style="font-size:11px;color:var(--text-3);margin-bottom:7px">Оценивается:</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:8px;font-size:12px;font-weight:500;background:#eeedfe;color:#3c3489"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#7F77DD" stroke-width="1.3"/><circle cx="7" cy="7" r="3" stroke="#7F77DD" stroke-width="1.3"/><circle cx="7" cy="7" r=".8" fill="#7F77DD"/></svg>Цели</span>
+              <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:8px;font-size:12px;font-weight:500;background:#faeeda;color:#633806"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 1.5l1.3 3 3.3.4-2.4 2.2.8 3.2L7 8.8l-3 1.5.8-3.2L2.4 4.9l3.3-.4L7 1.5z" stroke="#ef9f27" stroke-width="1.3" stroke-linejoin="round"/></svg>Ценности</span>
+              <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:8px;font-size:12px;font-weight:500;background:#e6f1fb;color:#0c447c"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="3" width="11" height="8" rx="1.5" stroke="#378ADD" stroke-width="1.3"/><path d="M4 7h6M4 9.5h4" stroke="#378ADD" stroke-width="1.3" stroke-linecap="round"/></svg>Компетенции</span>
+              <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:8px;font-size:12px;font-weight:500;background:#e1f5ee;color:#085041"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 3.5C2 2.67 2.67 2 3.5 2h7C11.33 2 12 2.67 12 3.5v5c0 .83-.67 1.5-1.5 1.5H8L7 11l-1-1.5H3.5C2.67 9.5 2 8.83 2 8V3.5z" stroke="#1D9E75" stroke-width="1.3"/></svg>Обратная связь</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="acc-header" onclick="this.querySelector('.acc-chevron').classList.toggle('open');this.nextElementSibling.classList.toggle('closed')">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="font-size:13px;font-weight:600;color:var(--text)">Ваши цели</div>
+            <span style="padding:2px 9px;border-radius:20px;font-size:11px;font-weight:500;background:#eeedfe;color:#3c3489">Взвешенный итог: B</span>
+          </div>
+          <svg class="acc-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="acc-body closed" style="border-top:1px solid var(--border)">
+          <div style="padding:0 18px">${goalsHtml}</div>
+          <div style="padding:10px 18px 14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+            <div style="font-size:12px;font-weight:600;color:var(--text)">Взвешенный итог по целям</div>
+            <span class="badge badge-B" style="font-size:13px;font-weight:700;padding:4px 14px">B — Выше ожиданий</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="acc-header" onclick="this.querySelector('.acc-chevron').classList.toggle('open');this.nextElementSibling.classList.toggle('closed')">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="font-size:13px;font-weight:600;color:var(--text)">Ваши компетенции</div>
+            <span style="padding:2px 9px;border-radius:20px;font-size:11px;font-weight:500;background:#e6f1fb;color:#0c447c">Средний балл: 4.1</span>
+          </div>
+          <svg class="acc-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="acc-body closed" style="border-top:1px solid var(--border)">
+        <div style="padding:14px 18px;display:flex;flex-direction:column;gap:12px">
+          ${[
+            {name:'Ориентация на результат', self:'4.2', peers:'4.5', manager:'4.4'},
+            {name:'Командная работа', self:'4.8', peers:'4.1', manager:'4.3'},
+            {name:'Коммуникация', self:'3.6', peers:'3.8', manager:'3.7'},
+          ].map(comp => '<div style="display:flex;align-items:center;justify-content:space-between">'
+            + '<div style="font-size:12px;font-weight:500;color:var(--text)">' + comp.name + '</div>'
+            + '<div style="display:flex;gap:10px">'
+            + '<div style="text-align:center"><div style="font-size:10px;color:var(--text-3);margin-bottom:3px">Самооценка</div><span class="badge badge-B">' + comp.self + '</span></div>'
+            + '<div style="text-align:center"><div style="font-size:10px;color:var(--text-3);margin-bottom:3px">Коллеги</div><span class="badge badge-B">' + comp.peers + '</span></div>'
+            + '<div style="text-align:center"><div style="font-size:10px;color:var(--text-3);margin-bottom:3px">Руководитель</div><span class="badge badge-B">' + comp.manager + '</span></div>'
+            + '</div></div>'
+          ).join('')}
+        </div>
+        <div style="padding:10px 18px 14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">Итог по компетенциям</div>
+          <span style="padding:3px 12px;border-radius:20px;font-size:13px;font-weight:700;background:#e6f1fb;color:#0c447c">4.1 / 5.0</span>
+        </div>
+      </div>
+    </div>
+    `;
+  }
+
+
+  if (currentView === 'calibration') {
+    renderStepper(steps_calibration);
+    content.innerHTML = `
+      <div class="card" style="padding:40px 22px;text-align:center">
+        <div style="width:48px;height:48px;border-radius:50%;background:var(--bg);border:1px solid var(--border-md);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="var(--text-3)" stroke-width="1.4"/><path d="M10 6v5l3 2" stroke="var(--text-3)" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </div>
+        <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px">Идёт калибровочная сессия</div>
+        <div style="font-size:13px;color:var(--text-2);max-width:360px;margin:0 auto;line-height:1.6">Руководители согласовывают итоговые рейтинги. После завершения вы получите уведомление с результатами оценки.</div>
+      </div>
+    `;
+  }
+
+  if (currentView === 'results') {
+    renderStepper(steps_results);
+    content.innerHTML = `
+      <div class="result-hero">
+        <div style="font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Итоговый рейтинг после калибровки</div>
+        <div class="result-rating" style="color:#0c447c">B</div>
+        <div class="result-rating-label">Выше ожиданий</div>
+
+      </div>
+      <div class="results-grid">
+        <div class="result-card">
+          <div class="result-card-label">Итог по целям</div>
+          <div class="result-card-val" style="color:#633806">C</div>
+          <div class="result-card-sub">Так держать · 3 цели</div>
+        </div>
+        <div class="result-card">
+          <div class="result-card-label">Оценка 360</div>
+          <div class="result-card-val" style="color:#27500a">4.1 <span style="font-size:14px;font-weight:400;color:var(--text-3)">/5.0</span></div>
+          <div class="result-card-sub">Средний балл по компетенциям</div>
+        </div>
+      </div>
+      <div class="feedback-block">
+        <div class="result-card-label" style="margin-bottom:10px">Обратная связь от руководителя</div>
+        <div class="feedback-text">Иван отлично справился с запуском нового продукта — сдал раньше срока и взял на себя роль техлида в критичный момент. Есть зона роста по автоматизации и выдерживанию плановых показателей — рекомендую сфокусироваться на этом в следующем году.</div>
+      </div>
+      <div class="card" style="border-color:#97c459">
+        <div class="result-card-label" style="margin-bottom:14px">Бонус за 2024 год</div>
+        <div style="display:flex;align-items:center;gap:0;flex-wrap:nowrap;margin-bottom:16px">
+          <div style="display:flex;flex-direction:column">
+            <span style="font-size:18px;font-weight:700;color:var(--text)">2 000 000 ₽</span>
+            <span style="font-size:11px;color:var(--text-2);margin-top:3px">Годовой ФОТ</span>
+          </div>
+          <span style="font-size:15px;color:var(--text-3);padding:0 10px">×</span>
+          <div style="display:flex;flex-direction:column">
+            <span style="font-size:18px;font-weight:700;color:var(--text)">18%</span>
+            <span style="font-size:11px;color:var(--text-2);margin-top:3px">Базовая премия</span>
+          </div>
+          <span style="font-size:15px;color:var(--text-3);padding:0 10px">×</span>
+          <div style="display:flex;flex-direction:column">
+            <span style="font-size:18px;font-weight:700;color:var(--text)">87%</span>
+            <span style="font-size:11px;color:var(--text-2);margin-top:3px">Исполнение КПЭ</span>
+          </div>
+          <span style="font-size:15px;color:var(--text-3);padding:0 10px">×</span>
+          <div style="display:flex;flex-direction:column">
+            <span style="font-size:18px;font-weight:700;color:var(--text)">1.0</span>
+            <span style="font-size:11px;color:var(--text-2);margin-top:3px">Корр. коэф.</span>
+          </div>
+          <span style="font-size:15px;color:var(--text-3);padding:0 10px">=</span>
+          <div style="display:flex;flex-direction:column">
+            <span style="font-size:22px;font-weight:700;color:#27500a">313 200 ₽</span>
+            <span style="font-size:11px;color:#3b6d11;margin-top:3px">К выплате</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+function renderGoals() {
+  return goals.map(g => {
+    const filled = g.score && g.kpi_fact ? 'filled' : '';
+    const scaleHtml = SCALE.map(s => {
+      const sel = g.score===s.val ? 'sel-'+s.val : '';
+      return '<button class="scale-btn ' + sel + '" onclick="setScore(' + g.id + ',\'' + s.val + '\')">'
+        + '<span class="scale-btn-letter">' + s.val + '</span>'
+        + '<span class="scale-btn-hint">' + s.hint + '</span>'
+        + '</button>';
+    }).join('');
+    const execPct = g.id===0?110:g.id===1?73:100;
+    const execPctStr = execPct + '%';
+    const execColor = execPct>=90?'#27500a':execPct>=70?'#854f0b':execPct>=50?'#633806':'#5f5e5a';
+    const execBg = execPct>=90?'#eaf3de':execPct>=70?'#faeeda':execPct>=50?'#fcebeb':'#f1efe8';
+    const justHtml = g.score ? ('<div class="scale-label" style="margin-top:12px">Обоснование самооценки</div>'
+      + '<textarea placeholder="Опишите почему вы выбрали эту оценку..." oninput="updateJustification(' + g.id + ',this.value)">' + (g.justification||'') + '</textarea>') : '';
+    const compsHtml = COMPETENCIES.map(c => {
+      const sel = g.comps.includes(c) ? 'selected' : '';
+      const x = g.comps.includes(c) ? '<span class="comp-tag-x">×</span>' : '';
+      return '<div class="comp-tag ' + sel + '" onclick="toggleComp(' + g.id + ',\'' + c + '\')">' + c + x + '</div>';
+    }).join('');
+    return '<div class="goal-card ' + filled + '" id="goal-card-' + g.id + '">'
+      + '<div class="goal-header">'
+      + '<div class="goal-name">' + g.name + '</div>'
+      + '</div>'
+      + '<div style="display:grid;grid-template-columns:1.5fr 1.5fr 1fr 0.6fr;gap:16px;margin:10px 0;align-items:start">'
+      + '<div><div class="goal-kpi-label">План</div><div style="font-size:12px;color:var(--text-2);line-height:1.5">' + g.kpi_plan + '</div></div>'
+      + '<div><div class="goal-kpi-label">Факт</div><div style="font-size:12px;color:var(--text-2);line-height:1.5;min-height:36px" contenteditable="true" oninput="updateKpi(' + g.id + ', this.innerText)">' + g.kpi_fact + '</div></div>'
+      + '<div style="text-align:center"><div class="goal-kpi-label">Исполнение</div><span style="display:inline-flex;align-items:center;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;background:' + execBg + ';color:' + execColor + ';margin-top:4px">' + execPctStr + '</span></div>'
+      + '<div style="text-align:center"><div class="goal-kpi-label">Вес</div><span style="display:inline-flex;align-items:center;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;background:#f1efe8;color:#5f5e5a;margin-top:4px">' + g.weight + '%</span></div>'
+      + '</div>'
+      + '<div style="border-top:1px solid var(--border);margin:14px 0"></div>'
+      + '<div class="scale-label" style="margin-top:0">Самооценка</div>'
+      + '<div class="scale-group">' + scaleHtml + '</div>'
+      + justHtml
+      + '<div class="comp-section">'
+      + '<div class="comp-label">Компетенции на развитие</div>'
+      + '<div class="comp-tags">' + compsHtml + '</div>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function updateKpi(id, val) {
+  goals[id].kpi_fact = val;
+  refreshProgress();
+}
+
+function updateJustification(id, val) {
+  goals[id].justification = val;
+}
+
+function setScore(id, val) {
+  goals[id].score = goals[id].score === val ? null : val;
+  reRenderGoals();
+}
+
+function toggleComp(id, comp) {
+  const g = goals[id];
+  if (g.comps.includes(comp)) g.comps = g.comps.filter(c=>c!==comp);
+  else g.comps.push(comp);
+  reRenderGoals();
+}
+
+function updateCompComment(id, val) { goals[id].compComment = val; }
+
+function reRenderGoals() {
+  document.getElementById('goals-list').innerHTML = renderGoals();
+  refreshProgress();
+}
+
+function refreshProgress() {
+  const filled = filledCount();
+  const total = goals.length;
+  const pct = Math.round((filled/total)*100);
+  const pbar = document.getElementById('pbar');
+  if (pbar) pbar.style.width = pct + '%';
+  const lbl = document.querySelector('.progress-label');
+  if (lbl) lbl.textContent = `Заполнено ${filled} из ${total} целей`;
+  const btn = document.querySelector('.btn-primary');
+  if (btn) {
+    btn.disabled = filled !== total;
+    const warn = document.querySelector('.warning-text');
+    if (warn) warn.textContent = filled===total ? '' : `Заполните все ${total-filled} оставшихся цели`;
+  }
+}
+
+function submitForm() {
+  showToast('Форма отправлена на согласование руководителю');
+  setTimeout(() => setView('sent'), 1200);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2800);
+}
+
+render();
+</script>
+</body>
+</html>

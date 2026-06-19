@@ -209,62 +209,85 @@ input[disabled]{opacity:.5}
     <div class="head">
       <h1>Циклы и сессии</h1>
       <div class="spacer"></div>
-      <button class="btn btn-pri" data-go="cycle"><svg class="ic"><use href="#i-plus"/></svg> Создать цикл</button>
+      <button class="btn btn-pri" data-go="cycle-new"><svg class="ic"><use href="#i-plus"/></svg> Создать цикл</button>
     </div>
-    <p class="sub">Цикл объединяет сессии за период (активный — один). Сессии запускаются внутри цикла — раскройте, чтобы их увидеть.</p>
+    <p class="sub">Цикл объединяет все сессии review за период. Запускайте внутри цикла сессии по шаблонам для разных категорий сотрудников. Будущие циклы можно запланировать заранее.</p>
 
-    <div class="tabs">
-      <button class="tab active" data-ctab="active">Активные</button>
-      <button class="tab" data-ctab="archive">Архивные</button>
-    </div>
 
-    <div class="tabpanel active" id="ctab-active">
-      <div class="cyc open">
-        <div class="cyc-h">
-          <svg class="ic exp"><use href="#i-chev"/></svg>
-          <div class="itile" style="background:var(--blue-bg);color:var(--blue-tx)"><svg class="ic"><use href="#i-cal"/></svg></div>
-          <div><div class="nm" data-go="cycle">Годовое ревью 2026</div><div class="ext">pr_review_2026 · 01.01.2026 — 01.01.2027</div></div>
-          <div class="cyc-meta"><span class="tag t-blue"><span class="d"></span>Активный</span><span class="cnt">3 сессии</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div>
-        </div>
-        <div class="cyc-body">
-          <div class="sesshead">Сессии в этом цикле</div>
-          <div class="sess"><div class="snm">Департамент разработки</div><span class="chip">Шаблон X</span><span class="chip ext">1 янв 2026 — 31 дек 2026</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 14</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
-          <div class="sess"><div class="snm">Продукт и маркетинг</div><span class="chip">Шаблон Y</span><span class="chip ext">1 июл 2026 — 31 дек 2026</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 9</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
-          <div class="sess"><div class="snm">Поддержка и операции</div><span class="chip">Шаблон Z</span><div class="right"><span class="tag t-gray">Черновик · не запущена</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
-          <div style="margin-top:14px"><button class="btn btn-pri btn-sm" data-go="launch"><svg class="ic"><use href="#i-rocket"/></svg> Запустить сессию</button></div>
-        </div>
+    <div class="cyc">
+      <div class="cyc-h">
+        <svg class="ic exp"><use href="#i-chev"/></svg>
+        <div class="itile" style="background:var(--purple-bg);color:var(--purple-tx)"><svg class="ic"><use href="#i-cal"/></svg></div>
+        <div><div class="nm" data-go="cycle">Годовое ревью 2027</div><div class="ext">pr_review_2027 · 01.01.2027 — 31.12.2027</div></div>
+        <div class="cyc-meta"><span class="tag t-purple"><span class="d"></span>Запланирован · старт 1 янв 2027</span><span class="cnt">0 сессий</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div>
       </div>
-
-      <div class="cyc">
-        <div class="cyc-h">
-          <svg class="ic exp"><use href="#i-chev"/></svg>
-          <div class="itile" style="background:var(--green-bg);color:var(--green-tx)"><svg class="ic"><use href="#i-cal"/></svg></div>
-          <div><div class="nm" data-go="cycle">Полугодие H1 2026</div><div class="ext">pr_review_h1_2026 · 01.01.2026 — 30.06.2026</div></div>
-          <div class="cyc-meta"><span class="tag t-green"><span class="d"></span>Завершён</span><span class="cnt">0 сессий</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div>
-        </div>
-        <div class="cyc-body">
-          <div class="sesshead">Сессии в этом цикле</div>
-          <div class="empty">Запусков ещё нет. Запустите первую сессию по шаблону.</div>
-          <div style="margin-top:8px"><button class="btn btn-pri btn-sm" data-go="launch"><svg class="ic"><use href="#i-rocket"/></svg> Запустить сессию</button></div>
-        </div>
+      <div class="cyc-body">
+        <div class="sesshead">Сессии в этом цикле</div>
+        <div class="empty">Сессий ещё нет. Цикл станет активным при запуске первой сессии.</div>
+        <div style="margin-top:8px"><button class="btn btn-pri btn-sm" data-go="launch"><svg class="ic"><use href="#i-rocket"/></svg> Запустить сессию</button></div>
       </div>
     </div>
 
-    <div class="tabpanel" id="ctab-archive">
-      <div class="cyc">
-        <div class="cyc-h">
-          <svg class="ic exp"><use href="#i-chev"/></svg>
-          <div class="itile" style="background:var(--gray-bg);color:var(--gray-tx)"><svg class="ic"><use href="#i-cal"/></svg></div>
-          <div><div class="nm" data-go="cycle">Годовое ревью 2025</div><div class="ext">pr_review_2025 · 01.01.2025 — 31.12.2025</div></div>
-          <div class="cyc-meta"><span class="tag t-gray"><span class="d"></span>Завершён</span><span class="cnt">4 сессии</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div>
+    <div class="cyc open">
+      <div class="cyc-h">
+        <svg class="ic exp"><use href="#i-chev"/></svg>
+        <div class="itile" style="background:var(--blue-bg);color:var(--blue-tx)"><svg class="ic"><use href="#i-cal"/></svg></div>
+        <div><div class="nm" data-go="cycle">Годовое ревью 2026</div><div class="ext">pr_review_2026 · 01.01.2026 — 01.01.2027</div></div>
+        <div class="cyc-meta"><span class="tag t-blue"><span class="d"></span>Активный</span><span class="cnt">3 сессии</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div>
+      </div>
+      <div class="cyc-body">
+        <div class="sesshead">Сессии в этом цикле</div>
+        <div class="sess"><div class="snm">Департамент разработки</div><span class="chip">Шаблон X</span><span class="chip ext">1 янв 2026 — 31 дек 2026</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 14</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+        <div class="sess"><div class="snm">Продукт и маркетинг</div><span class="chip">Шаблон Y</span><span class="chip ext">1 июл 2026 — 31 дек 2026</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 9</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+        <div class="sess"><div class="snm">Поддержка и операции</div><span class="chip">Шаблон Z</span><div class="right"><span class="tag t-gray">Черновик · не запущена</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+        <div style="margin-top:14px"><button class="btn btn-pri btn-sm" data-go="launch"><svg class="ic"><use href="#i-rocket"/></svg> Запустить сессию</button></div>
+      </div>
+    </div>
+
+    <div style="margin:20px 0 10px;font-size:12.5px;font-weight:600;color:var(--faint);text-transform:uppercase;letter-spacing:.04em">Завершённые</div>
+
+    <div class="cyc">
+      <div class="cyc-h">
+        <svg class="ic exp"><use href="#i-chev"/></svg>
+        <div class="itile" style="background:var(--gray-bg);color:var(--gray-tx)"><svg class="ic"><use href="#i-cal"/></svg></div>
+        <div><div class="nm" data-go="cycle">Годовое ревью 2025</div><div class="ext">pr_review_2025 · 01.01.2025 — 31.12.2025</div></div>
+        <div class="cyc-meta"><span class="tag t-gray"><span class="d"></span>Завершён</span><span class="cnt">4 сессии</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div>
+      </div>
+      <div class="cyc-body">
+        <div class="sesshead">Сессии в этом цикле</div>
+        <div class="sess"><div class="snm">Департамент разработки</div><span class="chip">Шаблон X</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 14</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+        <div class="sess"><div class="snm">Продукт и маркетинг</div><span class="chip">Шаблон Y</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 9</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+        <div class="sess"><div class="snm">Поддержка и операции</div><span class="chip">Шаблон Z</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 11</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+        <div class="sess"><div class="snm">Финансы</div><span class="chip">Шаблон Z</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 6</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- СОЗДАТЬ ЦИКЛ -->
+  <section class="screen" id="screen-cycle-new">
+    <div class="crumb"><a data-go="hub">Performance Review</a> <svg class="ic"><use href="#i-chev"/></svg> <a data-go="cycles">Циклы и сессии</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Новый цикл</b></div>
+    <div class="head"><h1>Новый цикл</h1></div>
+    <div style="display:flex;align-items:center;gap:8px;background:var(--purple-bg);color:var(--purple-tx);border-radius:var(--r);padding:11px 14px;font-size:13.5px;margin-bottom:16px"><svg class="ic" style="flex:0 0 auto"><use href="#i-cal"/></svg>Запланируйте будущий цикл проведения review — он появится в списке как «Запланирован»</div>
+    <div class="card">
+      <div class="row" style="border-top:none">
+        <span class="label">Название</span>
+        <input type="text" placeholder="например, Годовое ревью 2027" style="width:340px" />
+      </div>
+      <div class="row">
+        <span class="label">Внешний идентификатор</span>
+        <input type="text" placeholder="pr_review_2027" style="width:340px" />
+      </div>
+      <div class="row">
+        <span class="label">Период</span>
+        <div style="display:flex;gap:10px;align-items:center">
+          <input type="text" placeholder="01.01.2027" style="width:140px" />
+          <span class="muted">—</span>
+          <input type="text" placeholder="31.12.2027" style="width:140px" />
         </div>
-        <div class="cyc-body">
-          <div class="sesshead">Сессии в этом цикле</div>
-          <div class="sess"><div class="snm">Департамент разработки</div><span class="chip">Шаблон X</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 14</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
-          <div class="sess"><div class="snm">Продукт и маркетинг</div><span class="chip">Шаблон Y</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 9</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
-          <div class="sess"><div class="snm">Поддержка и операции</div><span class="chip">Шаблон Z</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 11</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
-          <div class="sess"><div class="snm">Финансы</div><span class="chip">Шаблон Z</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 6</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
-        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:18px;border-top:1px solid var(--line);padding-top:16px">
+        <button class="btn btn-pri" data-go="cycles"><svg class="ic"><use href="#i-check"/></svg> Создать цикл</button>
+        <button class="btn" data-go="cycles">Отмена</button>
       </div>
     </div>
   </section>

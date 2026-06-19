@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <base href="/skillaz-prototypes/">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Performance Review · администрирование</title>
+<style>
+:root{
+  --ink:#1b1f27; --muted:#6c727e; --faint:#a2a8b3;
+  --line:#edeff2; --line2:#e0e3e8; --soft:#f6f7f9;
+  --pri:#3b5bdb; --pri-d:#2f49bf; --pri-bg:#eaeefc;
+  --blue:#2f80ed; --blue-bg:#e8f1fe; --blue-tx:#1c5fc0;
+  --amber:#e8920a; --amber-bg:#fdf0d8; --amber-tx:#8f5d08;
+  --green:#1f9d57; --green-bg:#e2f6ec; --green-tx:#177544;
+  --purple:#6c4cd6; --purple-bg:#efeafe; --purple-tx:#5436b8;
+  --teal:#0f9b91; --teal-bg:#dcf4f1; --teal-tx:#0c736b;
+  --gray-bg:#eef0f3; --gray-tx:#6b6f78; --red:#d94a45; --red-bg:#fdebea;
+  --r:10px; --r-lg:14px;
+  --font:"Inter","Golos Text",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1060px;margin:0 auto;padding:26px 32px 70px}
+.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-3px;flex:0 0 auto}
+.ic-f{fill:currentColor;stroke:none}
+/* crumb + head */
+.crumb{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);margin-bottom:14px}
+.crumb a{color:var(--muted);text-decoration:none;cursor:pointer}.crumb a:hover{color:var(--ink)}
+.crumb b{color:var(--ink);font-weight:500}.crumb .ic{width:14px;height:14px;color:var(--faint)}
+.head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.head h1{font-size:26px;font-weight:600;margin:0;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:14px;margin:0 0 20px}
+.spacer{margin-left:auto}
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line2);background:#fff;border-radius:var(--r);padding:9px 15px;font-size:14px;font-family:inherit;color:var(--ink);cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--soft)}
+.btn .ic{width:17px;height:17px}
+.btn-pri{background:var(--pri);color:#fff;border-color:transparent}.btn-pri:hover{background:var(--pri-d)}
+.btn-sm{padding:6px 11px;font-size:13px;border-radius:9px}
+.pbtn{color:var(--blue-tx);border-color:#cfe0fb;background:var(--blue-bg)}.pbtn:hover{background:#dae9fd}
+.kebab{display:inline-flex;padding:6px;border-radius:8px;color:var(--faint);cursor:pointer;border:none;background:transparent}.kebab:hover{background:var(--soft);color:var(--muted)}
+.link{color:var(--pri);cursor:pointer}
+/* tabs */
+.tabs{display:flex;gap:24px;border-bottom:1px solid var(--line2);margin-bottom:20px}
+.tab{border:none;background:transparent;font-family:inherit;font-size:15px;color:var(--muted);padding:0 1px 12px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:7px}
+.tab:hover{color:var(--ink)}
+.tab.active{color:var(--pri);border-bottom-color:var(--pri);font-weight:500}
+.tabpanel{display:none}.tabpanel.active{display:block}
+.screen{display:none}.screen.active{display:block}
+/* tags */
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.tag .d{width:7px;height:7px;border-radius:50%}
+.t-blue{background:var(--blue-bg);color:var(--blue-tx)} .t-blue .d{background:var(--blue)}
+.t-amber{background:var(--amber-bg);color:var(--amber-tx)} .t-amber .d{background:var(--amber)}
+.t-green{background:var(--green-bg);color:var(--green-tx)} .t-green .d{background:var(--green)}
+.t-purple{background:var(--purple-bg);color:var(--purple-tx)} .t-purple .d{background:var(--purple)}
+.t-teal{background:var(--teal-bg);color:var(--teal-tx)} .t-teal .d{background:var(--teal)}
+.t-gray{background:var(--gray-bg);color:var(--gray-tx)} .t-gray .d{background:var(--faint)}
+.chip{display:inline-flex;align-items:center;gap:5px;background:var(--soft);color:#565b65;border:1px solid var(--line);border-radius:8px;padding:3px 9px;font-size:12.5px}
+.ext{color:var(--muted);font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12.5px}
+.muted{color:var(--muted)} .tiny{font-size:12.5px;color:var(--faint)}
+/* cards */
+.card{border:1px solid var(--line2);border-radius:var(--r-lg);padding:20px 22px;margin-bottom:14px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:none}
+.label{color:var(--muted);font-size:14px}
+/* cycle groups */
+.cyc{border:1px solid var(--line2);border-radius:var(--r-lg);margin-bottom:12px;overflow:hidden;transition:border-color .12s}
+.cyc.open{border-color:var(--pri);box-shadow:0 1px 0 var(--pri-bg)}
+.cyc-h{display:flex;align-items:center;gap:13px;padding:15px 18px;cursor:pointer}
+.cyc-h:hover{background:var(--soft)}
+.cyc-h .exp{color:var(--faint);transition:transform .15s}
+.cyc.open .exp{transform:rotate(90deg);color:var(--pri)}
+.itile{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.itile .ic{width:19px;height:19px}
+.cyc-h .nm{font-weight:600}
+.cyc-h .nm:hover{color:var(--pri)}
+.cyc-meta{display:flex;gap:18px;align-items:center;margin-left:auto}
+.cnt{color:var(--muted);font-size:13.5px;white-space:nowrap}
+.cyc-body{display:none;padding:4px 20px 18px 64px;background:#fbfcfe;border-top:1px solid var(--line)}
+.cyc.open .cyc-body{display:block}
+.sesshead{font-size:12.5px;color:var(--muted);margin:12px 0 2px;text-transform:uppercase;letter-spacing:.03em}
+.sess{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid var(--line)}
+.sess:last-of-type{border-bottom:none}
+.sess .snm{font-weight:500;min-width:200px}
+.sess .right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.empty{padding:14px 16px;color:var(--muted);font-size:14px;background:var(--soft);border-radius:var(--r);margin:8px 0}
+/* table */
+.tbl{width:100%;border-collapse:collapse;font-size:14.5px}
+.tbl th{text-align:left;color:var(--muted);font-weight:400;font-size:13px;padding:10px 14px;border-bottom:1px solid var(--line2)}
+.tbl td{padding:15px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:hover td{background:#fbfcfe}
+.tbl .nm{font-weight:600}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat{border-radius:var(--r-lg);padding:14px 16px}
+.stat .v{font-size:24px;font-weight:600;margin-top:2px}
+.stat .l{font-size:13px}
+/* form */
+input,select{font-family:inherit;font-size:14px;border:1px solid var(--line2);border-radius:var(--r);padding:0 12px;height:40px;background:#fff;color:var(--ink)}
+input:focus,select:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px var(--pri-bg)}
+input[disabled]{opacity:.5}
+.in-sm{height:34px}
+.sw{display:inline-flex;width:40px;height:23px;border-radius:999px;align-items:center;padding:2px;cursor:pointer;flex:0 0 auto}
+.sw-on{background:var(--pri);justify-content:flex-end}.sw-off{background:#cdd1d8;justify-content:flex-start}
+.kn{width:19px;height:19px;border-radius:50%;background:#fff}
+.gsub{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;margin:18px 0 4px}
+.note{display:flex;align-items:flex-start;gap:9px;margin-top:14px;padding:11px 13px;background:var(--pri-bg);border-radius:var(--r);font-size:13px;color:#3a437a}
+.note .ic{color:var(--pri);margin-top:1px}
+.seg{display:inline-flex;background:var(--soft);border:1px solid var(--line2);border-radius:10px;padding:3px}
+.seg button{border:none;background:transparent;font-family:inherit;font-size:13.5px;padding:7px 14px;border-radius:8px;cursor:pointer;color:var(--muted)}
+.seg button.on{background:#fff;color:var(--ink);font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+/* scale editor */
+.scrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.swatch{width:22px;height:22px;border-radius:6px;flex:0 0 auto;border:1px solid rgba(0,0,0,.06)}
+.vis{border:1px solid var(--line2);border-radius:var(--r);overflow:hidden;margin-top:6px}
+.vis .vr{display:grid;grid-template-columns:1.1fr 1.5fr 1.5fr;font-size:13.5px}
+.vis .vr+.vr{border-top:1px solid var(--line)}
+.vis .vh{background:var(--soft);color:var(--muted);font-size:12.5px}
+.vis .vr>div{padding:10px 12px}
+/* stepper */
+.step{display:flex;gap:15px}
+.step .rail{display:flex;flex-direction:column;align-items:center}
+.circ{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex:0 0 auto}
+.c-done{background:var(--green-bg);color:var(--green-tx)}.c-act{background:var(--pri);color:#fff}.c-wait{background:var(--soft);color:var(--faint);border:1px solid var(--line2)}
+.vline{width:2px;flex:1;background:var(--line2);margin:4px 0;min-height:14px}
+.step .body{padding-bottom:20px;flex:1}
+.step .ttl{font-size:16px;font-weight:600;margin:2px 0 9px}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.cyc-body{padding-left:20px}.sess{flex-wrap:wrap}.sess .snm{min-width:0}}
+.hcard{border:1px solid var(--line2);border-radius:var(--r-lg);padding:22px 22px 22px 20px;display:flex;gap:16px;cursor:pointer}
+.hcard:hover{border-color:var(--pri);background:var(--pri-bg)}
+.hcard-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.hcard-title{font-size:17px;font-weight:600;margin-bottom:4px}
+.hcard-sub{font-size:13.5px;color:var(--muted);margin-bottom:10px}
+.hcard-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+.hcard-list li{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.hcard-list li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--line2);flex:0 0 auto}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16.5" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5h.01"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></symbol>
+  <symbol id="i-grip" viewBox="0 0 24 24" class="ic-f"><circle cx="9" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="15" cy="18" r="1.4"/></symbol>
+  <symbol id="i-dots" viewBox="0 0 24 24" class="ic-f"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24" class="ic-f"><path d="M7 5v14l11-7z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-coins" viewBox="0 0 24 24"><ellipse cx="9" cy="6.5" rx="5.5" ry="2.8"/><path d="M3.5 6.5v5c0 1.5 2.5 2.8 5.5 2.8"/><ellipse cx="15" cy="13.5" rx="5.5" ry="2.8"/><path d="M9.5 13.7v3.3c0 1.5 2.5 2.8 5.5 2.8s5.5-1.3 5.5-2.8v-5"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M4 21v-6M4 11V3M12 21v-8M12 9V3M20 21v-4M20 13V3"/><circle cx="4" cy="13" r="2"/><circle cx="12" cy="7" r="2"/><circle cx="20" cy="15" r="2"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 2.5l9 4.8-9 4.8-9-4.8 9-4.8z"/><path d="M3 12.3l9 4.8 9-4.8M3 16.8l9 4.8 9-4.8"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.9 6.7 19.2l1-5.8L3.5 9.2l5.9-.9z"/></symbol>
+  <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M9 14.5L7.5 22 12 19.5 16.5 22 15 14.5"/></symbol>
+  <symbol id="i-msg" viewBox="0 0 24 24"><path d="M21 11.5a8 8 0 01-11.5 7.2L3 21l2.3-6.5A8 8 0 1121 11.5z"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M5 15c-1.5 1-2 5-2 5s4-.5 5-2c.6-.9.5-2.2-.3-3-.8-.8-2.1-.9-2.7-.1z"/><path d="M9 11a13 13 0 018-8c2 0 3 1 3 3a13 13 0 01-8 8z"/><path d="M9 11l-3 .5L4 9M13 15l-.5 3 2.5 2"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L5 19a1.5 1.5 0 001.3 2.2h11.4A1.5 1.5 0 0019 19l-5-10V3"/></symbol>
+</svg>
+
+<div class="wrap">
+
+  <!-- ХАБ -->
+  <section class="screen active" id="screen-hub">
+    <h1 style="margin:0 0 6px">Performance Review</h1>
+    <p class="sub">Выберите раздел</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:4px">
+      <div class="hcard" data-go="templates">
+        <div class="hcard-icon" style="background:var(--pri-bg);color:var(--pri)"><svg class="ic" style="width:22px;height:22px"><use href="#i-layers"/></svg></div>
+        <div>
+          <div class="hcard-title">Шаблоны ревью</div>
+          <div class="hcard-sub">Настройте один раз — запускайте многократно</div>
+          <ul class="hcard-list">
+            <li>Содержание оценки</li>
+            <li>Этапы и дедлайны</li>
+            <li>Шкалы оценок</li>
+            <li>Расчёт премии</li>
+            <li>Доступы по ролям</li>
+          </ul>
+        </div>
+      </div>
+      <div class="hcard" data-go="cycles">
+        <div class="hcard-icon" style="background:var(--green-bg);color:var(--green-tx)"><svg class="ic" style="width:22px;height:22px"><use href="#i-rocket"/></svg></div>
+        <div>
+          <div class="hcard-title">Циклы и сессии</div>
+          <div class="hcard-sub">Оперативная работа: запуск и контроль хода</div>
+          <ul class="hcard-list">
+            <li>Создать цикл ревью</li>
+            <li>Запустить сессию по шаблону</li>
+            <li>Отслеживать участников</li>
+            <li>Смотреть архивные циклы</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ЦИКЛЫ -->
+  <section class="screen" id="screen-cycles">
+    <div class="crumb"><a data-go="hub">Performance Review</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Циклы и сессии</b></div>
+    <div class="head">
+      <h1>Циклы и сессии</h1>
+      <div class="spacer"></div>
+      <button class="btn btn-pri" data-go="cycle"><svg class="ic"><use href="#i-plus"/></svg> Создать цикл</button>
+    </div>
+    <p class="sub">Цикл объединяет сессии за период (активный — один). Сессии запускаются внутри цикла — раскройте, чтобы их увидеть.</p>
+
+    <div class="tabs">
+      <button class="tab active" data-ctab="active">Активные</button>
+      <button class="tab" data-ctab="archive">Архивные</button>
+    </div>
+
+    <div class="tabpanel active" id="ctab-active">
+      <div class="cyc open">
+        <div class="cyc-h">
+          <svg class="ic exp"><use href="#i-chev"/></svg>
+          <div class="itile" style="background:var(--blue-bg);color:var(--blue-tx)"><svg class="ic"><use href="#i-cal"/></svg></div>
+          <div><div class="nm" data-go="cycle">Годовое ревью 2026</div><div class="ext">pr_review_2026 · 01.01.2026 — 01.01.2027</div></div>
+          <div class="cyc-meta"><span class="tag t-blue"><span class="d"></span>Активный</span><span class="cnt">3 сессии</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div>
+        </div>
+        <div class="cyc-body">
+          <div class="sesshead">Сессии в этом цикле</div>
+          <div class="sess"><div class="snm">Департамент разработки</div><span class="chip">Шаблон X</span><span class="chip ext">1 янв 2026 — 31 дек 2026</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 14</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+          <div class="sess"><div class="snm">Продукт и маркетинг</div><span class="chip">Шаблон Y</span><span class="chip ext">1 июл 2026 — 31 дек 2026</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 9</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+          <div class="sess"><div class="snm">Поддержка и операции</div><span class="chip">Шаблон Z</span><div class="right"><span class="tag t-gray">Черновик · не запущена</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+          <div style="margin-top:14px"><button class="btn btn-pri btn-sm" data-go="launch"><svg class="ic"><use href="#i-rocket"/></svg> Запустить сессию</button></div>
+        </div>
+      </div>
+
+      <div class="cyc">
+        <div class="cyc-h">
+          <svg class="ic exp"><use href="#i-chev"/></svg>
+          <div class="itile" style="background:var(--green-bg);color:var(--green-tx)"><svg class="ic"><use href="#i-cal"/></svg></div>
+          <div><div class="nm" data-go="cycle">Полугодие H1 2026</div><div class="ext">pr_review_h1_2026 · 01.01.2026 — 30.06.2026</div></div>
+          <div class="cyc-meta"><span class="tag t-green"><span class="d"></span>Завершён</span><span class="cnt">0 сессий</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div>
+        </div>
+        <div class="cyc-body">
+          <div class="sesshead">Сессии в этом цикле</div>
+          <div class="empty">Запусков ещё нет. Запустите первую сессию по шаблону.</div>
+          <div style="margin-top:8px"><button class="btn btn-pri btn-sm" data-go="launch"><svg class="ic"><use href="#i-rocket"/></svg> Запустить сессию</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabpanel" id="ctab-archive">
+      <div class="cyc">
+        <div class="cyc-h">
+          <svg class="ic exp"><use href="#i-chev"/></svg>
+          <div class="itile" style="background:var(--gray-bg);color:var(--gray-tx)"><svg class="ic"><use href="#i-cal"/></svg></div>
+          <div><div class="nm" data-go="cycle">Годовое ревью 2025</div><div class="ext">pr_review_2025 · 01.01.2025 — 31.12.2025</div></div>
+          <div class="cyc-meta"><span class="tag t-gray"><span class="d"></span>Завершён</span><span class="cnt">4 сессии</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div>
+        </div>
+        <div class="cyc-body">
+          <div class="sesshead">Сессии в этом цикле</div>
+          <div class="sess"><div class="snm">Департамент разработки</div><span class="chip">Шаблон X</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 14</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+          <div class="sess"><div class="snm">Продукт и маркетинг</div><span class="chip">Шаблон Y</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 9</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+          <div class="sess"><div class="snm">Поддержка и операции</div><span class="chip">Шаблон Z</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 11</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+          <div class="sess"><div class="snm">Финансы</div><span class="chip">Шаблон Z</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 6</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ЦИКЛ -->
+  <section class="screen" id="screen-cycle">
+    <div class="crumb"><a data-go="cycles">Циклы ревью</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Годовое ревью 2026</b></div>
+    <div class="head"><h1>Годовое ревью 2026</h1><div class="spacer"></div><button class="btn btn-pri" data-go="launch"><svg class="ic"><use href="#i-rocket"/></svg> Запустить сессию</button></div>
+
+    <div class="card">
+      <div style="display:flex;gap:34px;flex-wrap:wrap">
+        <div><div class="label">Внешний идентификатор</div><div class="ext" style="font-size:14px;margin-top:3px">pr_review_2026</div></div>
+        <div><div class="label">Период</div><div style="margin-top:3px">01.01.2026 — 01.01.2027</div></div>
+        <div><div class="label">Статус</div><div style="margin-top:3px"><span class="tag t-blue"><span class="d"></span>Активный</span></div></div>
+      </div>
+    </div>
+
+    <div style="margin:20px 2px 12px"><span style="font-weight:600">Сессии в этом цикле</span></div>
+
+    <table class="tbl">
+      <thead><tr><th>Аудитория</th><th>Шаблон</th><th>Период</th><th>Источник оценки 360</th><th>Участники</th><th></th></tr></thead>
+      <tbody>
+        <tr><td class="nm">Департамент разработки</td><td>Шаблон X</td><td class="ext">01.01.2026 — 31.12.2026</td><td class="ext">360_h2_2026</td><td><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> 14</button></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr><td class="nm">Продукт и маркетинг</td><td>Шаблон Y</td><td class="ext">01.07.2026 — 31.12.2026</td><td class="ext">360_h2_2026</td><td><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> 9</button></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr><td class="nm">Поддержка и операции</td><td>Шаблон Z</td><td class="ext">—</td><td class="ext">—</td><td><span class="tag t-gray">Черновик</span></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- УЧАСТНИКИ -->
+  <section class="screen" id="screen-participants">
+    <div class="crumb"><a data-go="cycles">Циклы ревью</a> <svg class="ic"><use href="#i-chev"/></svg> <a data-go="cycle">Годовое ревью 2026</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Департамент разработки</b></div>
+    <div class="head"><h1>Участники сессии</h1><div class="spacer"></div><span class="chip">Шаблон X</span><span class="chip ext">360_h2_2026</span></div>
+    <p class="sub">При запуске система создала по сессии на каждого сотрудника — статусы живут здесь. У самого запуска единого статуса нет.</p>
+
+    <div class="stats">
+      <div class="stat" style="background:var(--gray-bg)"><div class="l muted">Всего</div><div class="v">14</div></div>
+      <div class="stat" style="background:var(--blue-bg)"><div class="l" style="color:var(--blue-tx)">Оценка рук-ля</div><div class="v" style="color:var(--blue-tx)">6</div></div>
+      <div class="stat" style="background:var(--purple-bg)"><div class="l" style="color:var(--purple-tx)">На калибровке</div><div class="v" style="color:var(--purple-tx)">3</div></div>
+      <div class="stat" style="background:var(--green-bg)"><div class="l" style="color:var(--green-tx)">Опубликовано</div><div class="v" style="color:var(--green-tx)">2</div></div>
+    </div>
+
+    <table class="tbl">
+      <thead><tr><th>Сотрудник</th><th>Должность</th><th>Текущий этап</th><th>Итоговая оценка</th><th></th></tr></thead>
+      <tbody>
+        <tr><td class="nm">Виктория Миронова</td><td class="muted">Диджитал-маркетолог</td><td><span class="tag t-blue"><span class="d"></span>Оценка рук-ля</span></td><td class="muted">После завершения</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr><td class="nm">Илья Соколов</td><td class="muted">Продакт-менеджер</td><td><span class="tag t-purple"><span class="d"></span>На калибровке</span></td><td class="muted">После завершения</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr><td class="nm">Николай Воронов</td><td class="muted">Фронтенд-разработчик</td><td><span class="tag t-blue"><span class="d"></span>Оценка рук-ля</span></td><td class="muted">После завершения</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr><td class="nm">Дарья Орлова</td><td class="muted">UX-исследователь</td><td><span class="tag t-purple"><span class="d"></span>На калибровке</span></td><td class="muted">После завершения</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr><td class="nm">Артём Лебедев</td><td class="muted">Бэкенд-разработчик</td><td><span class="tag t-green"><span class="d"></span>Опубликовано</span></td><td><span class="tag t-purple">A — Исключительно</span></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr><td class="nm">Елена Громова</td><td class="muted">Ведущий аналитик</td><td><span class="tag t-green"><span class="d"></span>Опубликовано</span></td><td><span class="tag t-blue">B — Выше ожиданий</span></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ШАБЛОНЫ -->
+  <section class="screen" id="screen-templates">
+    <div class="crumb"><a data-go="hub">Performance Review</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Шаблоны ревью</b></div>
+    <div class="head"><h1>Шаблоны ревью</h1><div class="spacer"></div><button class="btn" data-go="scales"><svg class="ic"><use href="#i-scale"/></svg> Шкалы</button><button class="btn btn-pri" data-go="editor"><svg class="ic"><use href="#i-plus"/></svg> Создать шаблон</button></div>
+    <p class="sub">Переиспользуемые конфигурации сессии. Не привязаны к людям и датам.</p>
+
+    <table class="tbl">
+      <thead><tr><th>Название</th><th>Содержание</th><th>Этапы</th><th>Расчёт бонуса</th><th></th></tr></thead>
+      <tbody>
+        <tr data-go="editor"><td class="nm">Шаблон X · Разработка</td><td><span class="chip">Цели</span><span class="chip">Компетенции</span></td><td><span class="tag t-blue">Оценка рук-ля</span> <span class="tag t-purple">Калибровка</span></td><td><span class="tag t-green">вкл</span></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr data-go="editor"><td class="nm">Шаблон Y · Продакты</td><td><span class="chip">Цели</span><span class="chip">Ценности</span></td><td><span class="tag t-teal">Самооценка</span> <span class="tag t-blue">Оценка рук-ля</span></td><td><span class="tag t-gray">выкл</span></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr data-go="editor"><td class="nm">Шаблон Z · Поддержка</td><td><span class="chip">Цели</span></td><td><span class="tag t-blue">Оценка рук-ля</span> <span class="tag t-green">Публикация</span></td><td><span class="tag t-gray">выкл</span></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- РЕДАКТОР ШАБЛОНА -->
+  <section class="screen" id="screen-editor">
+    <div class="crumb"><a data-go="templates">Шаблоны ревью</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Шаблон X</b></div>
+    <div class="head"><h1>Шаблон X · Разработка</h1><div class="spacer"></div><button class="btn" data-go="templates">Отмена</button><button class="btn btn-pri"><svg class="ic"><use href="#i-check"/></svg> Сохранить</button></div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="content"><svg class="ic"><use href="#i-target"/></svg> Содержание</button>
+      <button class="tab" data-tab="stages"><svg class="ic"><use href="#i-layers"/></svg> Этапы</button>
+      <button class="tab" data-tab="scale"><svg class="ic"><use href="#i-scale"/></svg> Шкала</button>
+      <button class="tab" data-tab="bonus"><svg class="ic"><use href="#i-coins"/></svg> Премия <span style="font-size:11px;background:var(--gray-bg);color:var(--gray-tx);padding:2px 7px;border-radius:6px;font-weight:400;margin-left:2px">На развитие</span></button>
+      <button class="tab" data-tab="access"><svg class="ic"><use href="#i-eye"/></svg> Доступы</button>
+    </div>
+
+    <div class="tabpanel active" id="tab-content">
+      <div class="card">
+        <div class="gsub">Что оцениваем</div>
+        <div class="row"><span style="display:flex;align-items:center;gap:11px"><span class="itile" style="background:var(--teal-bg);color:var(--teal-tx)"><svg class="ic"><use href="#i-target"/></svg></span><span>Цели (OKR / KPI)</span></span><span class="sw sw-on"><span class="kn"></span></span></div>
+        <div class="row"><span style="display:flex;align-items:center;gap:11px"><span class="itile" style="background:var(--blue-bg);color:var(--blue-tx)"><svg class="ic"><use href="#i-award"/></svg></span><span>Компетенции по грейду</span></span><span class="sw sw-on"><span class="kn"></span></span></div>
+        <div class="row"><span style="display:flex;align-items:center;gap:11px"><span class="itile" style="background:var(--amber-bg);color:var(--amber-tx)"><svg class="ic"><use href="#i-star"/></svg></span><span>Ценности</span></span><span class="sw sw-off"><span class="kn"></span></span></div>
+        <div class="row"><span style="display:flex;align-items:center;gap:11px"><span class="itile" style="background:var(--gray-bg);color:var(--gray-tx)"><svg class="ic"><use href="#i-msg"/></svg></span><span>Фидбек<div class="tiny" style="color:var(--faint)">На развитие</div></span></span><span class="sw sw-off" style="opacity:.4;cursor:default"><span class="kn"></span></span></div>
+      </div>
+    </div>
+
+    <div class="tabpanel" id="tab-stages">
+      <div class="card">
+        <div class="gsub">Этапы · вкл/выкл, порядок и дедлайн</div>
+        <div class="row"><span style="display:flex;align-items:center;gap:8px"><svg class="ic" style="color:var(--faint)"><use href="#i-grip"/></svg> Самооценка</span><span style="display:flex;align-items:center;gap:12px"><input class="in-sm" style="width:120px" placeholder="дедлайн" disabled /><span class="sw sw-off"><span class="kn"></span></span></span></div>
+        <div class="row"><span style="display:flex;align-items:center;gap:8px"><svg class="ic" style="color:var(--faint)"><use href="#i-grip"/></svg> Оценка руководителя</span><span style="display:flex;align-items:center;gap:12px"><input class="in-sm" style="width:120px" value="до 7 фев" /><span class="sw sw-on"><span class="kn"></span></span></span></div>
+        <div class="row"><span style="display:flex;align-items:center;gap:8px"><svg class="ic" style="color:var(--faint)"><use href="#i-grip"/></svg> Оценка функц.руководителя</span><span style="display:flex;align-items:center;gap:12px"><input class="in-sm" style="width:120px" value="до 12 фев" /><span class="sw sw-on"><span class="kn"></span></span></span></div>
+        <div class="row"><span style="display:flex;align-items:center;gap:8px"><svg class="ic" style="color:var(--faint)"><use href="#i-grip"/></svg> Калибровка</span><span style="display:flex;align-items:center;gap:12px"><input class="in-sm" style="width:120px" value="до 20 фев" /><span class="sw sw-on"><span class="kn"></span></span></span></div>
+        <div class="row"><span style="display:flex;align-items:center;gap:8px"><svg class="ic" style="color:var(--faint)"><use href="#i-grip"/></svg> Публикация итогов</span><span style="display:flex;align-items:center;gap:12px"><input class="in-sm" style="width:120px" value="до 28 фев" /><span class="sw sw-on"><span class="kn"></span></span></span></div>
+      </div>
+    </div>
+
+    <div class="tabpanel" id="tab-scale">
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px">
+          <div class="gsub" style="margin:0">Шкала оценки</div>
+          <div class="seg" style="margin-left:auto"><button data-scale="std" class="on">Стандартная A–E</button><button data-scale="custom">Своя шкала</button></div>
+        </div>
+
+        <div id="scale-std">
+          <div class="scrow"><span class="swatch" style="background:var(--purple)"></span><b style="width:30px">A</b><span style="flex:1">Исключительно</span><span class="muted">балл 5</span></div>
+          <div class="scrow"><span class="swatch" style="background:var(--blue)"></span><b style="width:30px">B</b><span style="flex:1">Выше ожиданий</span><span class="muted">балл 4</span></div>
+          <div class="scrow"><span class="swatch" style="background:var(--green)"></span><b style="width:30px">C</b><span style="flex:1">Так держать</span><span class="muted">балл 3</span></div>
+          <div class="scrow"><span class="swatch" style="background:var(--amber)"></span><b style="width:30px">D</b><span style="flex:1">Требует развития</span><span class="muted">балл 2</span></div>
+          <div class="scrow" style="border-bottom:none"><span class="swatch" style="background:var(--red)"></span><b style="width:30px">E</b><span style="flex:1">Не соответствует</span><span class="muted">балл 1</span></div>
+        </div>
+
+        <div id="scale-custom" style="display:none">
+          <div class="scrow" style="color:var(--muted);font-size:12.5px;border-bottom-color:var(--line2)"><span style="width:22px"></span><span style="width:30px">Код</span><span style="flex:1">Название уровня</span><span style="width:80px">Балл</span><span style="width:36px"></span></div>
+          <div class="scrow"><input type="color" value="#6c4cd6" style="width:22px;height:22px;padding:0;border:none;background:none"><input value="A" style="width:30px;height:34px;padding:0 6px;text-align:center"><input value="Исключительно" style="flex:1;height:34px"><input value="5" style="width:80px;height:34px"><button class="kebab"><svg class="ic"><use href="#i-trash"/></svg></button></div>
+          <div class="scrow"><input type="color" value="#2f80ed" style="width:22px;height:22px;padding:0;border:none;background:none"><input value="B" style="width:30px;height:34px;padding:0 6px;text-align:center"><input value="Выше ожиданий" style="flex:1;height:34px"><input value="4" style="width:80px;height:34px"><button class="kebab"><svg class="ic"><use href="#i-trash"/></svg></button></div>
+          <div class="scrow"><input type="color" value="#1f9d57" style="width:22px;height:22px;padding:0;border:none;background:none"><input value="C" style="width:30px;height:34px;padding:0 6px;text-align:center"><input value="Соответствует" style="flex:1;height:34px"><input value="3" style="width:80px;height:34px"><button class="kebab"><svg class="ic"><use href="#i-trash"/></svg></button></div>
+          <div style="margin-top:12px;display:flex;gap:10px"><button class="btn btn-sm" id="add-level"><svg class="ic"><use href="#i-plus"/></svg> Добавить уровень</button><button class="btn btn-sm"><svg class="ic"><use href="#i-check"/></svg> Сохранить как шаблон шкалы</button></div>
+        </div>
+
+        <div class="note"><svg class="ic"><use href="#i-info"/></svg> Шкала может быть переопределена в рамках конкретной сессии.</div>
+      </div>
+    </div>
+
+    <div class="tabpanel" id="tab-bonus">
+      <div class="card">
+        <div class="row" style="border-top:none"><span style="display:flex;align-items:center;gap:11px"><span class="itile" style="background:var(--green-bg);color:var(--green-tx)"><svg class="ic"><use href="#i-coins"/></svg></span><span>Рассчитывать бонусную часть по итогам ревью<div class="tiny">влияет на материальную мотивацию · <span style="color:var(--faint)">На развитие</span></div></span></span><span class="sw sw-on" id="bonus-sw"><span class="kn"></span></span></div>
+
+        <div id="bonus-cfg">
+          <div class="gsub">База расчёта</div>
+          <div class="row"><span class="label">От чего считаем</span><select style="width:240px"><option>Оклад × целевой %</option><option>Целевой бонус (сумма)</option><option>Фиксированная сумма</option></select></div>
+          <div class="row"><span class="label">Целевой процент</span><input value="20%" style="width:120px;height:36px" /></div>
+
+          <div class="gsub">Коэффициент по итоговой оценке</div>
+          <div class="vis">
+            <div class="vr vh" style="grid-template-columns:1fr 1fr"><div>Итоговая оценка</div><div>Коэффициент</div></div>
+            <div class="vr" style="grid-template-columns:1fr 1fr"><div><span class="tag t-purple">A — Исключительно</span></div><div><input class="in-sm" value="1.3" style="width:90px;height:32px"></div></div>
+            <div class="vr" style="grid-template-columns:1fr 1fr"><div><span class="tag t-blue">B — Выше ожиданий</span></div><div><input class="in-sm" value="1.1" style="width:90px;height:32px"></div></div>
+            <div class="vr" style="grid-template-columns:1fr 1fr"><div><span class="tag t-green">C — Так держать</span></div><div><input class="in-sm" value="1.0" style="width:90px;height:32px"></div></div>
+            <div class="vr" style="grid-template-columns:1fr 1fr"><div><span class="tag t-amber">D — Требует развития</span></div><div><input class="in-sm" value="0.5" style="width:90px;height:32px"></div></div>
+            <div class="vr" style="grid-template-columns:1fr 1fr"><div><span class="tag t-red">E — Не соответствует</span></div><div><input class="in-sm" value="0" style="width:90px;height:32px"></div></div>
+          </div>
+
+          <div class="gsub">Формула</div>
+          <div style="background:var(--soft);border:1px solid var(--line2);border-radius:var(--r);padding:13px 15px;font-family:'SF Mono',ui-monospace,Menlo,monospace;font-size:13.5px">Премия = Оклад × Целевой&nbsp;% × Коэффициент(итоговая&nbsp;оценка)</div>
+          <div class="row"><span class="label">Для кого рассчитывается</span><select style="width:240px"><option>Все участники сессии</option><option>По грейду</option><option>По выбранным ролям</option></select></div>
+          <div class="note"><svg class="ic"><use href="#i-info"/></svg> Сумма премии видна сотруднику только если включена в «Доступах» на этапе «Итоги опубликованы».</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabpanel" id="tab-access">
+      <div class="card">
+        <div class="gsub">Что видит роль на странице этапа</div>
+        <div class="vis">
+          <div class="vr vh"><div>Этап</div><div>Сотрудник</div><div>Руководитель</div></div>
+          <div class="vr"><div><span class="tag t-blue">Оценка рук-ля</span></div><div class="muted">заглушка «идёт оценка»</div><div>данные + поле оценки</div></div>
+          <div class="vr"><div><span class="tag t-purple">Калибровка</span></div><div class="muted">заглушка</div><div>калибровка команды</div></div>
+          <div class="vr"><div><span class="tag t-green">Публикация</span></div><div class="muted">—</div><div>сводка + публикация</div></div>
+          <div class="vr"><div><span class="tag t-green">Итоги</span></div><div>оценка, ОС, премия*</div><div class="muted">итоги по команде</div></div>
+        </div>
+        <div class="note"><svg class="ic"><use href="#i-info"/></svg> * Премию сотруднику показываем, только если включён расчёт бонуса и доступ к нему.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ШКАЛЫ (библиотека) -->
+  <section class="screen" id="screen-scales">
+    <div class="crumb"><a data-go="hub">Performance Review</a> <svg class="ic"><use href="#i-chev"/></svg> <a data-go="templates">Шаблоны ревью</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Шкалы оценок</b></div>
+    <div class="head"><h1>Шкалы оценок</h1><div class="spacer"></div><button class="btn btn-pri" data-go="editor"><svg class="ic"><use href="#i-plus"/></svg> Создать шкалу</button></div>
+    <p class="sub">Переиспользуемые шкалы. Шаблон ревью ссылается на шкалу; в сессии её можно переопределить.</p>
+    <table class="tbl">
+      <thead><tr><th>Название</th><th>Уровни</th><th>Где используется</th><th></th></tr></thead>
+      <tbody>
+        <tr data-go="editor"><td class="nm">Стандартная A–E</td><td><span class="tag t-purple">A</span> <span class="tag t-blue">B</span> <span class="tag t-green">C</span> <span class="tag t-amber">D</span> <span class="tag t-red">E</span></td><td class="muted">Шаблоны X, Z</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr data-go="editor"><td class="nm">4 уровня (без E)</td><td><span class="tag t-purple">A</span> <span class="tag t-blue">B</span> <span class="tag t-green">C</span> <span class="tag t-amber">D</span></td><td class="muted">Шаблон Y</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr data-go="editor"><td class="nm">Числовая 1–10</td><td><span class="chip">1 … 10</span></td><td class="muted">—</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ЗАПУСК -->
+  <section class="screen" id="screen-launch">
+    <div class="crumb"><a data-go="cycles">Циклы ревью</a> <svg class="ic"><use href="#i-chev"/></svg> <a data-go="cycle">Годовое ревью 2026</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Новый запуск</b></div>
+    <div class="head"><h1>Запуск сессии</h1></div>
+
+    <div class="card">
+      <div class="step">
+        <div class="rail"><div class="circ c-done"><svg class="ic"><use href="#i-check"/></svg></div><div class="vline"></div></div>
+        <div class="body"><div class="ttl">Шаблон</div>
+          <select style="width:340px"><option>Шаблон X · Разработка</option><option>Шаблон Y · Продакты</option><option>Шаблон Z · Поддержка</option></select>
+          <div class="tiny" style="margin-top:6px">содержание, этапы, шкала, премия и доступы берутся из шаблона</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="rail"><div class="circ c-act">2</div><div class="vline"></div></div>
+        <div class="body"><div class="ttl">Кого оцениваем</div>
+          <span class="chip" style="background:var(--blue-bg);color:var(--blue-tx);border-color:#cfe0fb">Орг.: разработка <svg class="ic" style="width:14px;height:14px"><use href="#i-x"/></svg></span>
+          <span class="chip" style="background:var(--blue-bg);color:var(--blue-tx);border-color:#cfe0fb">Должность: QA <svg class="ic" style="width:14px;height:14px"><use href="#i-x"/></svg></span>
+          <span class="chip"><svg class="ic" style="width:14px;height:14px"><use href="#i-plus"/></svg> точечно</span>
+          <div class="tiny" style="margin-top:6px">критерии комбинируются, дубли убираются · фильтры расширяемы</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="rail"><div class="circ c-wait">3</div><div class="vline"></div></div>
+        <div class="body"><div class="ttl">Период и источник 360</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <div><div class="label">Период</div><input value="= период цикла" style="width:200px;margin-top:3px" /></div>
+            <div><div class="label">Источник оценки 360</div><select style="width:200px;margin-top:3px"><option>360_h2_2026</option><option>360_annual_2026</option></select></div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="rail"><div class="circ c-wait">4</div></div>
+        <div class="body"><div class="ttl">Запуск</div>
+          <div class="note" style="margin-top:0"><svg class="ic"><use href="#i-shield"/></svg> Валидация: проверяем наличие данных (цели / компетенции / 360) и показываем, по кому их нет.</div>
+          <div style="display:flex;gap:10px;margin-top:14px"><button class="btn btn-pri" data-go="cycle"><svg class="ic"><use href="#i-check"/></svg> Сохранить</button><button class="btn" data-go="cycle">Отмена</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  function show(id){ document.querySelectorAll('.screen').forEach(function(s){ s.classList.toggle('active', s.id==='screen-'+id); }); window.scrollTo(0,0); }
+  document.querySelectorAll('[data-go]').forEach(function(b){ b.addEventListener('click', function(e){ if(e.target.closest('.kebab'))return; e.stopPropagation(); show(b.dataset.go); }); });
+
+  function tabGroup(attr, prefix){
+    document.querySelectorAll('[data-'+attr+']').forEach(function(t){
+      t.addEventListener('click', function(){
+        var grp=t.closest('.tabs'); grp.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active');}); t.classList.add('active');
+        var key=t.getAttribute('data-'+attr);
+        document.querySelectorAll('[id^="'+prefix+'"]').forEach(function(p){ if(p.id.indexOf(prefix)===0 && p.classList.contains('tabpanel')) p.classList.remove('active'); });
+        var pn=document.getElementById(prefix+key); if(pn) pn.classList.add('active');
+      });
+    });
+  }
+  tabGroup('tab','tab-'); tabGroup('ctab','ctab-');
+
+  document.querySelectorAll('.cyc-h').forEach(function(h){ h.addEventListener('click', function(e){ if(e.target.closest('[data-go]')||e.target.closest('.kebab'))return; h.parentElement.classList.toggle('open'); }); });
+
+  document.querySelectorAll('.sw').forEach(function(s){ if(s.id==='bonus-sw')return; s.addEventListener('click', function(ev){ ev.stopPropagation(); var on=s.classList.toggle('sw-on'); s.classList.toggle('sw-off', !on); }); });
+
+  var bsw=document.getElementById('bonus-sw'), bcfg=document.getElementById('bonus-cfg');
+  if(bsw){ bsw.addEventListener('click', function(){ var on=bsw.classList.toggle('sw-on'); bsw.classList.toggle('sw-off', !on); bcfg.style.display=on?'block':'none'; }); }
+
+  document.querySelectorAll('[data-scale]').forEach(function(b){ b.addEventListener('click', function(){
+    document.querySelectorAll('[data-scale]').forEach(function(x){x.classList.remove('on');}); b.classList.add('on');
+    var custom=b.dataset.scale==='custom';
+    document.getElementById('scale-std').style.display=custom?'none':'block';
+    document.getElementById('scale-custom').style.display=custom?'block':'none';
+  }); });
+
+  var addBtn=document.getElementById('add-level');
+  if(addBtn){ addBtn.addEventListener('click', function(){
+    var row=document.createElement('div'); row.className='scrow';
+    row.innerHTML='<input type="color" value="#888888" style="width:22px;height:22px;padding:0;border:none;background:none"><input style="width:30px;height:34px;padding:0 6px;text-align:center"><input placeholder="Название" style="flex:1;height:34px"><input placeholder="балл" style="width:80px;height:34px"><button class="kebab"><svg class="ic"><use href="#i-trash"/></svg></button>';
+    addBtn.closest('#scale-custom').insertBefore(row, addBtn.parentElement);
+    row.querySelector('.kebab').addEventListener('click', function(){ row.remove(); });
+  }); }
+  document.querySelectorAll('#scale-custom .kebab').forEach(function(k){ k.addEventListener('click', function(){ k.closest('.scrow').remove(); }); });
+})();
+</script>
+</body>
+</html>

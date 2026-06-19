@@ -223,7 +223,7 @@ input[disabled]{opacity:.5}
       </div>
       <div class="cyc-body">
         <div class="sesshead">Сессии в этом цикле</div>
-        <div class="empty">Сессий ещё нет. Цикл станет активным при запуске первой сессии.</div>
+        <div class="empty">Сессий ещё нет.</div>
         <div style="margin-top:8px"><button class="btn btn-pri btn-sm" data-go="launch"><svg class="ic"><use href="#i-rocket"/></svg> Запустить сессию</button></div>
       </div>
     </div>
@@ -395,28 +395,26 @@ input[disabled]{opacity:.5}
 
     <div class="tabpanel" id="tab-scale">
       <div class="card">
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px">
-          <div class="gsub" style="margin:0">Шкала оценки</div>
-          <div class="seg" style="margin-left:auto"><button data-scale="std" class="on">Стандартная A–E</button><button data-scale="custom">Своя шкала</button></div>
+        <div class="row" style="border-top:none">
+          <span class="label">Шкала оценки</span>
+          <div style="display:flex;align-items:center;gap:10px">
+            <select style="width:240px" id="scale-picker">
+              <option>Стандартная A–E</option>
+              <option>4 уровня (без E)</option>
+              <option>Числовая 1–10</option>
+            </select>
+            <button class="btn btn-sm" data-go="scale-edit"><svg class="ic"><use href="#i-plus"/></svg> Новая шкала</button>
+          </div>
         </div>
 
-        <div id="scale-std">
-          <div class="scrow"><span class="swatch" style="background:var(--purple)"></span><b style="width:30px">A</b><span style="flex:1">Исключительно</span><span class="muted">балл 5</span></div>
-          <div class="scrow"><span class="swatch" style="background:var(--blue)"></span><b style="width:30px">B</b><span style="flex:1">Выше ожиданий</span><span class="muted">балл 4</span></div>
-          <div class="scrow"><span class="swatch" style="background:var(--green)"></span><b style="width:30px">C</b><span style="flex:1">Так держать</span><span class="muted">балл 3</span></div>
-          <div class="scrow"><span class="swatch" style="background:var(--amber)"></span><b style="width:30px">D</b><span style="flex:1">Требует развития</span><span class="muted">балл 2</span></div>
-          <div class="scrow" style="border-bottom:none"><span class="swatch" style="background:var(--red)"></span><b style="width:30px">E</b><span style="flex:1">Не соответствует</span><span class="muted">балл 1</span></div>
-        </div>
+        <div class="gsub" style="margin-top:14px">Уровни выбранной шкалы</div>
+        <div class="scrow"><span class="swatch" style="background:var(--purple)"></span><b style="width:30px">A</b><span style="flex:1">Исключительно</span><span class="muted">балл 5</span></div>
+        <div class="scrow"><span class="swatch" style="background:var(--blue)"></span><b style="width:30px">B</b><span style="flex:1">Выше ожиданий</span><span class="muted">балл 4</span></div>
+        <div class="scrow"><span class="swatch" style="background:var(--green)"></span><b style="width:30px">C</b><span style="flex:1">Так держать</span><span class="muted">балл 3</span></div>
+        <div class="scrow"><span class="swatch" style="background:var(--amber)"></span><b style="width:30px">D</b><span style="flex:1">Требует развития</span><span class="muted">балл 2</span></div>
+        <div class="scrow" style="border-bottom:none"><span class="swatch" style="background:var(--red)"></span><b style="width:30px">E</b><span style="flex:1">Не соответствует</span><span class="muted">балл 1</span></div>
 
-        <div id="scale-custom" style="display:none">
-          <div class="scrow" style="color:var(--muted);font-size:12.5px;border-bottom-color:var(--line2)"><span style="width:22px"></span><span style="width:30px">Код</span><span style="flex:1">Название уровня</span><span style="width:80px">Балл</span><span style="width:36px"></span></div>
-          <div class="scrow"><input type="color" value="#6c4cd6" style="width:22px;height:22px;padding:0;border:none;background:none"><input value="A" style="width:30px;height:34px;padding:0 6px;text-align:center"><input value="Исключительно" style="flex:1;height:34px"><input value="5" style="width:80px;height:34px"><button class="kebab"><svg class="ic"><use href="#i-trash"/></svg></button></div>
-          <div class="scrow"><input type="color" value="#2f80ed" style="width:22px;height:22px;padding:0;border:none;background:none"><input value="B" style="width:30px;height:34px;padding:0 6px;text-align:center"><input value="Выше ожиданий" style="flex:1;height:34px"><input value="4" style="width:80px;height:34px"><button class="kebab"><svg class="ic"><use href="#i-trash"/></svg></button></div>
-          <div class="scrow"><input type="color" value="#1f9d57" style="width:22px;height:22px;padding:0;border:none;background:none"><input value="C" style="width:30px;height:34px;padding:0 6px;text-align:center"><input value="Соответствует" style="flex:1;height:34px"><input value="3" style="width:80px;height:34px"><button class="kebab"><svg class="ic"><use href="#i-trash"/></svg></button></div>
-          <div style="margin-top:12px;display:flex;gap:10px"><button class="btn btn-sm" id="add-level"><svg class="ic"><use href="#i-plus"/></svg> Добавить уровень</button><button class="btn btn-sm"><svg class="ic"><use href="#i-check"/></svg> Сохранить как шаблон шкалы</button></div>
-        </div>
-
-        <div class="note"><svg class="ic"><use href="#i-info"/></svg> Шкала может быть переопределена в рамках конкретной сессии.</div>
+        <div class="note" style="margin-top:14px"><svg class="ic"><use href="#i-info"/></svg> Чтобы изменить состав уровней — отредактируйте шкалу в библиотеке или создайте новую.</div>
       </div>
     </div>
 
@@ -465,16 +463,41 @@ input[disabled]{opacity:.5}
   <!-- ШКАЛЫ (библиотека) -->
   <section class="screen" id="screen-scales">
     <div class="crumb"><a data-go="hub">Performance Review</a> <svg class="ic"><use href="#i-chev"/></svg> <a data-go="templates">Шаблоны ревью</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Шкалы оценок</b></div>
-    <div class="head"><h1>Шкалы оценок</h1><div class="spacer"></div><button class="btn btn-pri" data-go="editor"><svg class="ic"><use href="#i-plus"/></svg> Создать шкалу</button></div>
+    <div class="head"><h1>Шкалы оценок</h1><div class="spacer"></div><button class="btn btn-pri" data-go="scale-edit"><svg class="ic"><use href="#i-plus"/></svg> Создать шкалу</button></div>
     <p class="sub">Переиспользуемые шкалы. Шаблон ревью ссылается на шкалу; в сессии её можно переопределить.</p>
     <table class="tbl">
       <thead><tr><th>Название</th><th>Уровни</th><th>Где используется</th><th></th></tr></thead>
       <tbody>
-        <tr data-go="editor"><td class="nm">Стандартная A–E</td><td><span class="tag t-purple">A</span> <span class="tag t-blue">B</span> <span class="tag t-green">C</span> <span class="tag t-amber">D</span> <span class="tag t-red">E</span></td><td class="muted">Шаблоны X, Z</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
-        <tr data-go="editor"><td class="nm">4 уровня (без E)</td><td><span class="tag t-purple">A</span> <span class="tag t-blue">B</span> <span class="tag t-green">C</span> <span class="tag t-amber">D</span></td><td class="muted">Шаблон Y</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
-        <tr data-go="editor"><td class="nm">Числовая 1–10</td><td><span class="chip">1 … 10</span></td><td class="muted">—</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr data-go="scale-edit"><td class="nm">Стандартная A–E</td><td><span class="tag t-purple">A</span> <span class="tag t-blue">B</span> <span class="tag t-green">C</span> <span class="tag t-amber">D</span> <span class="tag t-red">E</span></td><td class="muted">Шаблоны X, Z</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr data-go="scale-edit"><td class="nm">4 уровня (без E)</td><td><span class="tag t-purple">A</span> <span class="tag t-blue">B</span> <span class="tag t-green">C</span> <span class="tag t-amber">D</span></td><td class="muted">Шаблон Y</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr data-go="scale-edit"><td class="nm">Числовая 1–10</td><td><span class="chip">1 … 10</span></td><td class="muted">—</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
       </tbody>
     </table>
+  </section>
+
+  <!-- РЕДАКТОР ШКАЛЫ -->
+  <section class="screen" id="screen-scale-edit">
+    <div class="crumb"><a data-go="hub">Performance Review</a> <svg class="ic"><use href="#i-chev"/></svg> <a data-go="templates">Шаблоны ревью</a> <svg class="ic"><use href="#i-chev"/></svg> <a data-go="scales">Шкалы оценок</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Стандартная A–E</b></div>
+    <div class="head"><h1>Стандартная A–E</h1><div class="spacer"></div><button class="btn" data-go="scales">Отмена</button><button class="btn btn-pri"><svg class="ic"><use href="#i-check"/></svg> Сохранить</button></div>
+
+    <div class="card">
+      <div class="row" style="border-top:none">
+        <span class="label">Название шкалы</span>
+        <input type="text" value="Стандартная A–E" style="width:320px" />
+      </div>
+
+      <div class="gsub">Уровни шкалы</div>
+      <div class="scrow" style="color:var(--muted);font-size:12.5px;border-bottom-color:var(--line2)">
+        <span style="width:22px"></span><span style="width:42px">Код</span><span style="flex:1">Название уровня</span><span style="width:90px">Балл</span><span style="width:36px"></span>
+      </div>
+      <div class="scrow"><input type="color" value="#6c4cd6" style="width:22px;height:22px;padding:0;border:none;background:none;cursor:pointer"><input value="A" style="width:42px;height:36px;padding:0 8px;text-align:center"><input value="Исключительно" style="flex:1;height:36px"><input value="5" style="width:90px;height:36px"><button class="kebab sc-del"><svg class="ic"><use href="#i-trash"/></svg></button></div>
+      <div class="scrow"><input type="color" value="#2f80ed" style="width:22px;height:22px;padding:0;border:none;background:none;cursor:pointer"><input value="B" style="width:42px;height:36px;padding:0 8px;text-align:center"><input value="Выше ожиданий" style="flex:1;height:36px"><input value="4" style="width:90px;height:36px"><button class="kebab sc-del"><svg class="ic"><use href="#i-trash"/></svg></button></div>
+      <div class="scrow"><input type="color" value="#1f9d57" style="width:22px;height:22px;padding:0;border:none;background:none;cursor:pointer"><input value="C" style="width:42px;height:36px;padding:0 8px;text-align:center"><input value="Так держать" style="flex:1;height:36px"><input value="3" style="width:90px;height:36px"><button class="kebab sc-del"><svg class="ic"><use href="#i-trash"/></svg></button></div>
+      <div class="scrow"><input type="color" value="#e8920a" style="width:22px;height:22px;padding:0;border:none;background:none;cursor:pointer"><input value="D" style="width:42px;height:36px;padding:0 8px;text-align:center"><input value="Требует развития" style="flex:1;height:36px"><input value="2" style="width:90px;height:36px"><button class="kebab sc-del"><svg class="ic"><use href="#i-trash"/></svg></button></div>
+      <div class="scrow" style="border-bottom:none"><input type="color" value="#d94a45" style="width:22px;height:22px;padding:0;border:none;background:none;cursor:pointer"><input value="E" style="width:42px;height:36px;padding:0 8px;text-align:center"><input value="Не соответствует" style="flex:1;height:36px"><input value="1" style="width:90px;height:36px"><button class="kebab sc-del"><svg class="ic"><use href="#i-trash"/></svg></button></div>
+
+      <div style="margin-top:14px"><button class="btn btn-sm" id="add-sc-level"><svg class="ic"><use href="#i-plus"/></svg> Добавить уровень</button></div>
+    </div>
   </section>
 
   <!-- ЗАПУСК -->
@@ -558,7 +581,14 @@ input[disabled]{opacity:.5}
     addBtn.closest('#scale-custom').insertBefore(row, addBtn.parentElement);
     row.querySelector('.kebab').addEventListener('click', function(){ row.remove(); });
   }); }
-  document.querySelectorAll('#scale-custom .kebab').forEach(function(k){ k.addEventListener('click', function(){ k.closest('.scrow').remove(); }); });
+  document.querySelectorAll('.sc-del').forEach(function(b){ b.addEventListener('click', function(){ b.closest('.scrow').remove(); }); });
+  var addScBtn = document.getElementById('add-sc-level');
+  if(addScBtn){ addScBtn.addEventListener('click', function(){
+    var row = document.createElement('div'); row.className = 'scrow';
+    row.innerHTML = '<input type="color" value="#888888" style="width:22px;height:22px;padding:0;border:none;background:none;cursor:pointer"><input placeholder="Код" style="width:42px;height:36px;padding:0 8px;text-align:center"><input placeholder="Название" style="flex:1;height:36px"><input placeholder="балл" style="width:90px;height:36px"><button class="kebab sc-del"><svg class="ic"><use href="#i-trash"/></svg></button>';
+    addScBtn.parentElement.insertBefore(row, addScBtn.parentElement.querySelector('button'));
+    row.querySelector('.sc-del').addEventListener('click', function(){ row.remove(); });
+  }); }
 })();
 </script>
 </body>

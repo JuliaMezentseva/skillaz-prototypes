@@ -176,7 +176,7 @@ input[disabled]{opacity:.5}
       <div class="hcard" data-go="templates">
         <div class="hcard-icon" style="background:var(--pri-bg);color:var(--pri)"><svg class="ic" style="width:22px;height:22px"><use href="#i-layers"/></svg></div>
         <div>
-          <div class="hcard-title">Шаблоны ревью</div>
+          <div class="hcard-title">Шаблоны</div>
           <div class="hcard-sub">Настройте один раз — запускайте многократно</div>
           <ul class="hcard-list">
             <li>Содержание оценки</li>
@@ -211,14 +211,14 @@ input[disabled]{opacity:.5}
       <div class="spacer"></div>
       <button class="btn btn-pri" data-go="cycle-new"><svg class="ic"><use href="#i-plus"/></svg> Создать цикл</button>
     </div>
-    <p class="sub">Цикл объединяет все сессии review за период. Запускайте внутри цикла сессии по шаблонам для разных категорий сотрудников. Будущие циклы можно запланировать заранее.</p>
+    <p class="sub">Цикл — это период проведения ревью в компании. Внутри цикла запускаются сессии по готовым шаблонам для разных команд и категорий сотрудников. Создайте цикл, запустите сессии и отслеживайте ход оценки.</p>
 
 
     <div class="cyc">
       <div class="cyc-h">
         <svg class="ic exp"><use href="#i-chev"/></svg>
         <div class="itile" style="background:var(--purple-bg);color:var(--purple-tx)"><svg class="ic"><use href="#i-cal"/></svg></div>
-        <div><div class="nm" data-go="cycle">Годовое ревью 2027</div><div class="ext">pr_review_2027 · 01.01.2027 — 31.12.2027</div></div>
+        <div><div class="nm" data-go="cycle">Полугодовое ревью H1 2027</div><div class="ext">01.01.2027 — 30.06.2027</div></div>
         <div class="cyc-meta"><span class="tag t-purple"><span class="d"></span>Запланирован · старт 1 янв 2027</span><span class="cnt">0 сессий</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div>
       </div>
       <div class="cyc-body">
@@ -228,18 +228,18 @@ input[disabled]{opacity:.5}
       </div>
     </div>
 
-    <div class="cyc open">
+    <div class="cyc">
       <div class="cyc-h">
         <svg class="ic exp"><use href="#i-chev"/></svg>
         <div class="itile" style="background:var(--blue-bg);color:var(--blue-tx)"><svg class="ic"><use href="#i-cal"/></svg></div>
-        <div><div class="nm" data-go="cycle">Годовое ревью 2026</div><div class="ext">pr_review_2026 · 01.01.2026 — 01.01.2027</div></div>
+        <div><div class="nm" data-go="cycle">Годовое ревью 2026</div><div class="ext">01.01.2026 — 01.01.2027</div></div>
         <div class="cyc-meta"><span class="tag t-blue"><span class="d"></span>Активный</span><span class="cnt">3 сессии</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div>
       </div>
       <div class="cyc-body">
         <div class="sesshead">Сессии в этом цикле</div>
-        <div class="sess"><div class="snm">Департамент разработки</div><span class="chip">Шаблон X</span><span class="chip ext">1 янв 2026 — 31 дек 2026</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 14</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
-        <div class="sess"><div class="snm">Продукт и маркетинг</div><span class="chip">Шаблон Y</span><span class="chip ext">1 июл 2026 — 31 дек 2026</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 9</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
-        <div class="sess"><div class="snm">Поддержка и операции</div><span class="chip">Шаблон Z</span><div class="right"><span class="tag t-gray">Черновик · не запущена</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+        <div class="sess"><div class="snm">Департамент разработки</div><span class="chip">Шаблон X · Team Lead</span><span class="chip ext">1 янв 2026 — 31 дек 2026</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 14</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+        <div class="sess"><div class="snm">Продукт и маркетинг</div><span class="chip">Шаблон Y · Product Owner</span><span class="chip ext">1 июл 2026 — 31 дек 2026</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 9</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+        <div class="sess"><div class="snm">Поддержка и операции</div><span class="chip">Шаблон Z · HR &amp; Operations</span><div class="right"><span class="tag t-gray">Черновик · не запущена</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
         <div style="margin-top:14px"><button class="btn btn-pri btn-sm" data-go="launch"><svg class="ic"><use href="#i-rocket"/></svg> Запустить сессию</button></div>
       </div>
     </div>
@@ -250,15 +250,15 @@ input[disabled]{opacity:.5}
       <div class="cyc-h">
         <svg class="ic exp"><use href="#i-chev"/></svg>
         <div class="itile" style="background:var(--gray-bg);color:var(--gray-tx)"><svg class="ic"><use href="#i-cal"/></svg></div>
-        <div><div class="nm" data-go="cycle">Годовое ревью 2025</div><div class="ext">pr_review_2025 · 01.01.2025 — 31.12.2025</div></div>
+        <div><div class="nm" data-go="cycle">Годовое ревью 2025</div><div class="ext">01.01.2025 — 31.12.2025</div></div>
         <div class="cyc-meta"><span class="tag t-gray"><span class="d"></span>Завершён</span><span class="cnt">4 сессии</span><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div>
       </div>
       <div class="cyc-body">
         <div class="sesshead">Сессии в этом цикле</div>
-        <div class="sess"><div class="snm">Департамент разработки</div><span class="chip">Шаблон X</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 14</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
-        <div class="sess"><div class="snm">Продукт и маркетинг</div><span class="chip">Шаблон Y</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 9</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
-        <div class="sess"><div class="snm">Поддержка и операции</div><span class="chip">Шаблон Z</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 11</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
-        <div class="sess"><div class="snm">Финансы</div><span class="chip">Шаблон Z</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 6</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+        <div class="sess"><div class="snm">Департамент разработки</div><span class="chip">Шаблон X · Team Lead</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 14</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+        <div class="sess"><div class="snm">Продукт и маркетинг</div><span class="chip">Шаблон Y · Product Owner</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 9</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+        <div class="sess"><div class="snm">Поддержка и операции</div><span class="chip">Шаблон Z · HR &amp; Operations</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 11</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
+        <div class="sess"><div class="snm">Финансы</div><span class="chip">Шаблон Z · HR &amp; Operations</span><div class="right"><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> Участники · 6</button><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></div></div>
       </div>
     </div>
   </section>
@@ -310,9 +310,9 @@ input[disabled]{opacity:.5}
     <table class="tbl">
       <thead><tr><th>Аудитория</th><th>Шаблон</th><th>Период</th><th>Источник оценки 360</th><th>Участники</th><th></th></tr></thead>
       <tbody>
-        <tr><td class="nm">Департамент разработки</td><td>Шаблон X</td><td class="ext">01.01.2026 — 31.12.2026</td><td class="ext">360_h2_2026</td><td><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> 14</button></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
-        <tr><td class="nm">Продукт и маркетинг</td><td>Шаблон Y</td><td class="ext">01.07.2026 — 31.12.2026</td><td class="ext">360_h2_2026</td><td><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> 9</button></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
-        <tr><td class="nm">Поддержка и операции</td><td>Шаблон Z</td><td class="ext">—</td><td class="ext">—</td><td><span class="tag t-gray">Черновик</span></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr><td class="nm">Департамент разработки</td><td>Шаблон X · Team Lead</td><td class="ext">01.01.2026 — 31.12.2026</td><td class="ext">360_h2_2026</td><td><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> 14</button></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr><td class="nm">Продукт и маркетинг</td><td>Шаблон Y · Product Owner</td><td class="ext">01.07.2026 — 31.12.2026</td><td class="ext">360_h2_2026</td><td><button class="btn btn-sm pbtn" data-go="participants"><svg class="ic"><use href="#i-users"/></svg> 9</button></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr><td class="nm">Поддержка и операции</td><td>Шаблон Z · HR &amp; Operations</td><td class="ext">—</td><td class="ext">—</td><td><span class="tag t-gray">Черновик</span></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
       </tbody>
     </table>
   </section>
@@ -320,7 +320,7 @@ input[disabled]{opacity:.5}
   <!-- УЧАСТНИКИ -->
   <section class="screen" id="screen-participants">
     <div class="crumb"><a data-go="cycles">Циклы ревью</a> <svg class="ic"><use href="#i-chev"/></svg> <a data-go="cycle">Годовое ревью 2026</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Департамент разработки</b></div>
-    <div class="head"><h1>Участники сессии</h1><div class="spacer"></div><span class="chip">Шаблон X</span><span class="chip ext">360_h2_2026</span></div>
+    <div class="head"><h1>Участники сессии</h1><div class="spacer"></div><span class="chip">Шаблон X · Team Lead</span><span class="chip ext">360_h2_2026</span></div>
     <p class="sub">При запуске система создала по сессии на каждого сотрудника — статусы живут здесь. У самого запуска единого статуса нет.</p>
 
     <div class="stats">
@@ -345,30 +345,31 @@ input[disabled]{opacity:.5}
 
   <!-- ШАБЛОНЫ -->
   <section class="screen" id="screen-templates">
-    <div class="crumb"><a data-go="hub">Performance Review</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Шаблоны ревью</b></div>
-    <div class="head"><h1>Шаблоны ревью</h1><div class="spacer"></div><button class="btn" data-go="scales"><svg class="ic"><use href="#i-scale"/></svg> Шкалы</button><button class="btn btn-pri" data-go="editor"><svg class="ic"><use href="#i-plus"/></svg> Создать шаблон</button></div>
-    <p class="sub">Переиспользуемые конфигурации сессии. Не привязаны к людям и датам.</p>
+    <div class="crumb"><a data-go="hub">Performance Review</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Шаблоны</b></div>
+    <div class="head"><h1>Шаблоны</h1><div class="spacer"></div><button class="btn" data-go="scales"><svg class="ic"><use href="#i-scale"/></svg> Шкалы</button><button class="btn btn-pri" data-go="editor"><svg class="ic"><use href="#i-plus"/></svg> Создать шаблон</button></div>
+    <p class="sub">Шаблон — это правила проведения ревью: что оцениваем, по какой шкале, какие этапы проходит сотрудник и кто участвует в оценке. Создайте шаблон один раз и запускайте по нему сессии для разных команд и периодов.</p>
 
     <table class="tbl">
-      <thead><tr><th>Название</th><th>Содержание</th><th>Этапы</th><th>Расчёт бонуса</th><th></th></tr></thead>
+      <thead><tr><th>Название</th><th>Содержание оценки</th><th>Расчёт бонуса</th><th></th></tr></thead>
       <tbody>
-        <tr data-go="editor"><td class="nm">Шаблон X · Разработка</td><td><span class="chip">Цели</span><span class="chip">Компетенции</span></td><td><span class="tag t-blue">Оценка рук-ля</span> <span class="tag t-purple">Калибровка</span></td><td><span class="tag t-green">вкл</span></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
-        <tr data-go="editor"><td class="nm">Шаблон Y · Продакты</td><td><span class="chip">Цели</span><span class="chip">Ценности</span></td><td><span class="tag t-teal">Самооценка</span> <span class="tag t-blue">Оценка рук-ля</span></td><td><span class="tag t-gray">выкл</span></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
-        <tr data-go="editor"><td class="nm">Шаблон Z · Поддержка</td><td><span class="chip">Цели</span></td><td><span class="tag t-blue">Оценка рук-ля</span> <span class="tag t-green">Публикация</span></td><td><span class="tag t-gray">выкл</span></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr data-go="editor"><td class="nm">Шаблон X · Team Lead</td><td><span class="chip">Цели</span><span class="chip">Компетенции</span></td><td><span class="tag t-green">вкл</span></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr data-go="editor"><td class="nm">Шаблон Y · Product Owner</td><td><span class="chip">Цели</span><span class="chip">Ценности</span></td><td><span class="tag t-gray">выкл</span></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr data-go="editor"><td class="nm">Шаблон Z · HR &amp; Operations</td><td><span class="chip">Цели</span></td><td><span class="tag t-gray">выкл</span></td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
       </tbody>
     </table>
   </section>
 
   <!-- РЕДАКТОР ШАБЛОНА -->
   <section class="screen" id="screen-editor">
-    <div class="crumb"><a data-go="templates">Шаблоны ревью</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Шаблон X</b></div>
-    <div class="head"><h1>Шаблон X · Разработка</h1><div class="spacer"></div><button class="btn" data-go="templates">Отмена</button><button class="btn btn-pri"><svg class="ic"><use href="#i-check"/></svg> Сохранить</button></div>
+    <div class="crumb"><a data-go="templates">Шаблоны</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Шаблон X · Team Lead</b></div>
+    <div class="head"><h1>Шаблон X · Team Lead</h1><div class="spacer"></div><button class="btn" data-go="templates">Отмена</button><button class="btn btn-pri"><svg class="ic"><use href="#i-check"/></svg> Сохранить</button></div>
 
     <div class="tabs">
       <button class="tab active" data-tab="content"><svg class="ic"><use href="#i-target"/></svg> Содержание</button>
       <button class="tab" data-tab="stages"><svg class="ic"><use href="#i-layers"/></svg> Этапы</button>
       <button class="tab" data-tab="scale"><svg class="ic"><use href="#i-scale"/></svg> Шкала</button>
-      <button class="tab" data-tab="bonus"><svg class="ic"><use href="#i-coins"/></svg> Премия <span style="font-size:11px;background:var(--gray-bg);color:var(--gray-tx);padding:2px 7px;border-radius:6px;font-weight:400;margin-left:2px">На развитие</span></button>
+      <button class="tab" data-tab="rating"><svg class="ic"><use href="#i-flask"/></svg> Итоговая оценка</button>
+      <button class="tab" data-tab="bonus"><svg class="ic"><use href="#i-coins"/></svg> Расчёт бонуса</button>
       <button class="tab" data-tab="access"><svg class="ic"><use href="#i-eye"/></svg> Доступы</button>
     </div>
 
@@ -378,7 +379,7 @@ input[disabled]{opacity:.5}
         <div class="row"><span style="display:flex;align-items:center;gap:11px"><span class="itile" style="background:var(--teal-bg);color:var(--teal-tx)"><svg class="ic"><use href="#i-target"/></svg></span><span>Цели (OKR / KPI)</span></span><span class="sw sw-on"><span class="kn"></span></span></div>
         <div class="row"><span style="display:flex;align-items:center;gap:11px"><span class="itile" style="background:var(--blue-bg);color:var(--blue-tx)"><svg class="ic"><use href="#i-award"/></svg></span><span>Компетенции по грейду</span></span><span class="sw sw-on"><span class="kn"></span></span></div>
         <div class="row"><span style="display:flex;align-items:center;gap:11px"><span class="itile" style="background:var(--amber-bg);color:var(--amber-tx)"><svg class="ic"><use href="#i-star"/></svg></span><span>Ценности</span></span><span class="sw sw-off"><span class="kn"></span></span></div>
-        <div class="row"><span style="display:flex;align-items:center;gap:11px"><span class="itile" style="background:var(--gray-bg);color:var(--gray-tx)"><svg class="ic"><use href="#i-msg"/></svg></span><span>Фидбек<div class="tiny" style="color:var(--faint)">На развитие</div></span></span><span class="sw sw-off" style="opacity:.4;cursor:default"><span class="kn"></span></span></div>
+        <div class="row"><span style="display:flex;align-items:center;gap:11px"><span class="itile" style="background:var(--gray-bg);color:var(--gray-tx)"><svg class="ic"><use href="#i-msg"/></svg></span><span>Фидбек</span></span><span class="sw sw-off"><span class="kn"></span></span></div>
       </div>
     </div>
 
@@ -418,16 +419,110 @@ input[disabled]{opacity:.5}
       </div>
     </div>
 
+    <div class="tabpanel" id="tab-rating">
+      <div class="card">
+
+        <div class="row" style="border-top:none;padding-bottom:18px">
+          <div style="font-weight:500">Автоматический расчёт итоговой оценки</div>
+          <span class="sw sw-on" id="rating-sw"><span class="kn"></span></span>
+        </div>
+
+        <div id="rating-cfg">
+          <div class="gsub" style="font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--faint);font-weight:600;margin:4px 0 14px">Веса оценщиков</div>
+
+          <div style="display:flex;flex-direction:column;gap:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-top:1px solid var(--line)">
+              <span style="font-size:15px">Оценка сотрудника</span>
+              <div style="display:flex;align-items:center;gap:8px">
+                <input id="w1" type="number" min="0" max="100" value="20" style="width:64px;height:36px;font-size:14px;text-align:center" oninput="updateWeights()">
+                <span class="muted" style="font-size:13px;width:14px">%</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-top:1px solid var(--line)">
+              <span style="font-size:15px">Оценка руководителя</span>
+              <div style="display:flex;align-items:center;gap:8px">
+                <input id="w2" type="number" min="0" max="100" value="80" style="width:64px;height:36px;font-size:14px;text-align:center" oninput="updateWeights()">
+                <span class="muted" style="font-size:13px;width:14px">%</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-top:1px solid var(--line);opacity:.4">
+              <span style="font-size:15px">Оценка функц. руководителя</span>
+              <div style="display:flex;align-items:center;gap:8px">
+                <input id="w3" type="number" min="0" max="100" value="0" style="width:64px;height:36px;font-size:14px;text-align:center" disabled>
+                <span class="muted" style="font-size:13px;width:14px">%</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="weight-sum-row" style="display:flex;align-items:center;gap:8px;padding:12px 0;font-size:13.5px;color:var(--green-tx)">
+            <svg class="ic"><use href="#i-check"/></svg>
+            <span>Сумма весов: <b id="weight-sum">100%</b></span>
+          </div>
+
+          <div class="gsub" style="font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--faint);font-weight:600;margin:8px 0 14px">Пример расчёта</div>
+
+          <div style="background:var(--soft);border-radius:var(--r);padding:16px 18px;font-size:13.5px;line-height:2">
+            <div style="display:grid;grid-template-columns:1fr auto auto;gap:4px 24px;margin-bottom:12px">
+              <span class="tiny">Оценщик</span>
+              <span class="tiny" style="text-align:center">Оценка</span>
+              <span class="tiny" style="text-align:right">Балл × вес</span>
+
+              <span>Оценка сотрудника</span>
+              <span style="text-align:center"><span class="tag t-blue" style="font-size:11px">B</span></span>
+              <span style="text-align:right;color:var(--muted)">4 × 20% = <b style="color:var(--ink)">0.80</b></span>
+
+              <span>Оценка руководителя</span>
+              <span style="text-align:center"><span class="tag t-green" style="font-size:11px">C</span></span>
+              <span style="text-align:right;color:var(--muted)">3 × 80% = <b style="color:var(--ink)">2.40</b></span>
+            </div>
+            <div style="border-top:1px solid var(--line2);padding-top:12px;display:flex;justify-content:space-between;align-items:center">
+              <span class="muted">0.80 + 2.40 = <b style="color:var(--ink)">3.20</b></span>
+              <span>→ <span class="tag t-green" style="font-size:12px">C — Так держать</span></span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
     <div class="tabpanel" id="tab-bonus">
       <div class="card">
-        <div class="row" style="border-top:none"><span style="display:flex;align-items:center;gap:11px"><span class="itile" style="background:var(--green-bg);color:var(--green-tx)"><svg class="ic"><use href="#i-coins"/></svg></span><span>Рассчитывать бонусную часть по итогам ревью<div class="tiny">влияет на материальную мотивацию · <span style="color:var(--faint)">На развитие</span></div></span></span><span class="sw sw-on" id="bonus-sw"><span class="kn"></span></span></div>
+        <div class="row" style="border-top:none"><span style="display:flex;align-items:center;gap:11px"><span class="itile" style="background:var(--green-bg);color:var(--green-tx)"><svg class="ic"><use href="#i-coins"/></svg></span><span>Рассчитывать бонусную часть по итогам ревью<div class="tiny">влияет на материальную мотивацию</div></span></span><span class="sw sw-on" id="bonus-sw"><span class="kn"></span></span></div>
 
         <div id="bonus-cfg">
-          <div class="gsub">База расчёта</div>
-          <div class="row"><span class="label">От чего считаем</span><select style="width:240px"><option>Оклад × целевой %</option><option>Целевой бонус (сумма)</option><option>Фиксированная сумма</option></select></div>
-          <div class="row"><span class="label">Целевой процент</span><input value="20%" style="width:120px;height:36px" /></div>
+          <div style="display:flex;align-items:center;gap:12px;margin:22px 0 12px;padding-top:18px;border-top:1px solid var(--line2)">
+            <span style="font-size:15px;font-weight:600;color:var(--ink)">Переменные формулы</span>
+            <span style="font-size:13px;color:var(--muted)">задайте переменные для формулы расчёта</span>
+          </div>
 
-          <div class="gsub">Коэффициент по итоговой оценке</div>
+          <div style="border:1px solid var(--line2);border-radius:var(--r);overflow:hidden;margin-bottom:4px">
+            <div style="display:grid;grid-template-columns:1fr 1fr auto;background:var(--soft);font-size:12.5px;color:var(--muted);font-weight:500">
+              <div style="padding:9px 12px">Название переменной</div>
+              <div style="padding:9px 12px">Источник / значение</div>
+              <div style="padding:9px 12px"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr auto;border-top:1px solid var(--line)">
+              <div style="padding:10px 12px"><input type="text" value="Оклад" style="width:100%;height:34px;font-size:13px"></div>
+              <div style="padding:10px 12px"><select style="width:100%;height:34px;font-size:13px"><option>Из профиля сотрудника</option><option>Ввод вручную</option><option>Фиксированное значение</option></select></div>
+              <div style="padding:10px 12px;display:flex;align-items:center"><button class="kebab"><svg class="ic"><use href="#i-trash"/></svg></button></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr auto;border-top:1px solid var(--line)">
+              <div style="padding:10px 12px"><input type="text" value="Целевой %" style="width:100%;height:34px;font-size:13px"></div>
+              <div style="padding:10px 12px"><input type="text" value="20" placeholder="значение" style="width:100%;height:34px;font-size:13px"></div>
+              <div style="padding:10px 12px;display:flex;align-items:center"><button class="kebab"><svg class="ic"><use href="#i-trash"/></svg></button></div>
+            </div>
+          </div>
+          <button class="btn btn-sm" style="margin-bottom:14px"><svg class="ic"><use href="#i-plus"/></svg> Добавить переменную</button>
+
+          <div style="display:flex;align-items:center;gap:12px;margin:22px 0 8px;padding-top:18px;border-top:1px solid var(--line2)">
+            <span style="font-size:15px;font-weight:600;color:var(--ink)">Формула расчёта</span>
+          </div>
+          <div class="tiny" style="margin-bottom:8px;color:var(--muted)">Используйте названия переменных из таблицы выше и переменную <code style="background:var(--soft);padding:1px 5px;border-radius:4px;font-size:12px">Коэффициент</code> — она подставляется автоматически по итоговой оценке.</div>
+          <input type="text" value="Оклад × Целевой % × Коэффициент" style="width:100%;height:40px;font-size:14px;font-family:'SF Mono',ui-monospace,Menlo,monospace">
+
+          <div style="display:flex;align-items:center;gap:12px;margin:22px 0 12px;padding-top:18px;border-top:1px solid var(--line2)">
+            <span style="font-size:15px;font-weight:600;color:var(--ink)">Коэффициент по итоговой оценке</span>
+          </div>
           <div class="vis">
             <div class="vr vh" style="grid-template-columns:1fr 1fr"><div>Итоговая оценка</div><div>Коэффициент</div></div>
             <div class="vr" style="grid-template-columns:1fr 1fr"><div><span class="tag t-purple">A — Исключительно</span></div><div><input class="in-sm" value="1.3" style="width:90px;height:32px"></div></div>
@@ -437,39 +532,43 @@ input[disabled]{opacity:.5}
             <div class="vr" style="grid-template-columns:1fr 1fr"><div><span class="tag t-red">E — Не соответствует</span></div><div><input class="in-sm" value="0" style="width:90px;height:32px"></div></div>
           </div>
 
-          <div class="gsub">Формула</div>
-          <div style="background:var(--soft);border:1px solid var(--line2);border-radius:var(--r);padding:13px 15px;font-family:'SF Mono',ui-monospace,Menlo,monospace;font-size:13.5px">Премия = Оклад × Целевой&nbsp;% × Коэффициент(итоговая&nbsp;оценка)</div>
-          <div class="row"><span class="label">Для кого рассчитывается</span><select style="width:240px"><option>Все участники сессии</option><option>По грейду</option><option>По выбранным ролям</option></select></div>
-          <div class="note"><svg class="ic"><use href="#i-info"/></svg> Сумма премии видна сотруднику только если включена в «Доступах» на этапе «Итоги опубликованы».</div>
+          <div style="display:flex;align-items:center;gap:12px;margin:22px 0 10px;padding-top:18px;border-top:1px solid var(--line2)">
+            <span style="font-size:15px;font-weight:600;color:var(--ink)">Пример расчёта</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+            <span class="label" style="font-size:13px">Результат показывать как:</span>
+            <div style="display:flex;background:var(--soft);border:1px solid var(--line2);border-radius:var(--r-md);padding:3px;gap:2px">
+              <button id="res-pct" onclick="setResult('pct')" style="padding:5px 13px;font-size:13px;border:none;border-radius:7px;cursor:pointer;background:var(--bg-primary);font-family:inherit;font-weight:500">% от оклада</button>
+              <button id="res-sum" onclick="setResult('sum')" style="padding:5px 13px;font-size:13px;border:none;border-radius:7px;cursor:pointer;background:transparent;font-family:inherit;color:var(--muted)">Сумма</button>
+            </div>
+          </div>
+          <div style="background:var(--soft);border-radius:var(--r);padding:13px 16px;font-size:13.5px;line-height:1.9">
+            <div id="ex-pct">Целевой % <b>20%</b> × Коэффициент <b>1.1</b> (оценка B) = <span class="tag t-green" style="font-size:13px">22% от оклада</span></div>
+            <div id="ex-sum" style="display:none">Оклад <b>100 000</b> × Целевой % <b>20%</b> × Коэффициент <b>1.1</b> (оценка B) = <span class="tag t-green" style="font-size:13px">22 000 ₽</span></div>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="tabpanel" id="tab-access">
-      <div class="card">
-        <div class="gsub">Что видит роль на странице этапа</div>
-        <div class="vis">
-          <div class="vr vh"><div>Этап</div><div>Сотрудник</div><div>Руководитель</div></div>
-          <div class="vr"><div><span class="tag t-blue">Оценка рук-ля</span></div><div class="muted">заглушка «идёт оценка»</div><div>данные + поле оценки</div></div>
-          <div class="vr"><div><span class="tag t-purple">Калибровка</span></div><div class="muted">заглушка</div><div>калибровка команды</div></div>
-          <div class="vr"><div><span class="tag t-green">Публикация</span></div><div class="muted">—</div><div>сводка + публикация</div></div>
-          <div class="vr"><div><span class="tag t-green">Итоги</span></div><div>оценка, ОС, премия*</div><div class="muted">итоги по команде</div></div>
-        </div>
-        <div class="note"><svg class="ic"><use href="#i-info"/></svg> * Премию сотруднику показываем, только если включён расчёт бонуса и доступ к нему.</div>
+      <div class="card" style="text-align:center;padding:40px 24px">
+        <svg class="ic" style="width:36px;height:36px;color:var(--faint);margin-bottom:12px"><use href="#i-eye"/></svg>
+        <div style="font-size:16px;font-weight:500;margin-bottom:8px">Доступы и видимость</div>
+        <div class="muted" style="font-size:14px;max-width:380px;margin:0 auto;line-height:1.6">Здесь можно будет настроить, что видит каждая роль (сотрудник, руководитель, HR) на странице каждого этапа ревью — в процессе и после публикации итогов.</div>
       </div>
     </div>
   </section>
 
   <!-- ШКАЛЫ (библиотека) -->
   <section class="screen" id="screen-scales">
-    <div class="crumb"><a data-go="hub">Performance Review</a> <svg class="ic"><use href="#i-chev"/></svg> <a data-go="templates">Шаблоны ревью</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Шкалы оценок</b></div>
+    <div class="crumb"><a data-go="hub">Performance Review</a> <svg class="ic"><use href="#i-chev"/></svg> <a data-go="templates">Шаблоны</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Шкалы оценок</b></div>
     <div class="head"><h1>Шкалы оценок</h1><div class="spacer"></div><button class="btn btn-pri" data-go="scale-edit"><svg class="ic"><use href="#i-plus"/></svg> Создать шкалу</button></div>
     <p class="sub">Переиспользуемые шкалы. Шаблон ревью ссылается на шкалу; в сессии её можно переопределить.</p>
     <table class="tbl">
       <thead><tr><th>Название</th><th>Уровни</th><th>Где используется</th><th></th></tr></thead>
       <tbody>
-        <tr data-go="scale-edit"><td class="nm">Стандартная A–E</td><td><span class="tag t-purple">A</span> <span class="tag t-blue">B</span> <span class="tag t-green">C</span> <span class="tag t-amber">D</span> <span class="tag t-red">E</span></td><td class="muted">Шаблоны X, Z</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
-        <tr data-go="scale-edit"><td class="nm">4 уровня (без E)</td><td><span class="tag t-purple">A</span> <span class="tag t-blue">B</span> <span class="tag t-green">C</span> <span class="tag t-amber">D</span></td><td class="muted">Шаблон Y</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr data-go="scale-edit"><td class="nm">Стандартная A–E</td><td><span class="tag t-purple">A</span> <span class="tag t-blue">B</span> <span class="tag t-green">C</span> <span class="tag t-amber">D</span> <span class="tag t-red">E</span></td><td class="muted">Шаблон X · Team Lead, Шаблон Z · HR &amp; Operations</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
+        <tr data-go="scale-edit"><td class="nm">4 уровня (без E)</td><td><span class="tag t-purple">A</span> <span class="tag t-blue">B</span> <span class="tag t-green">C</span> <span class="tag t-amber">D</span></td><td class="muted">Шаблон Y · Product Owner</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
         <tr data-go="scale-edit"><td class="nm">Числовая 1–10</td><td><span class="chip">1 … 10</span></td><td class="muted">—</td><td style="text-align:right"><button class="kebab"><svg class="ic"><use href="#i-dots"/></svg></button></td></tr>
       </tbody>
     </table>
@@ -477,7 +576,7 @@ input[disabled]{opacity:.5}
 
   <!-- РЕДАКТОР ШКАЛЫ -->
   <section class="screen" id="screen-scale-edit">
-    <div class="crumb"><a data-go="hub">Performance Review</a> <svg class="ic"><use href="#i-chev"/></svg> <a data-go="templates">Шаблоны ревью</a> <svg class="ic"><use href="#i-chev"/></svg> <a data-go="scales">Шкалы оценок</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Стандартная A–E</b></div>
+    <div class="crumb"><a data-go="hub">Performance Review</a> <svg class="ic"><use href="#i-chev"/></svg> <a data-go="templates">Шаблоны</a> <svg class="ic"><use href="#i-chev"/></svg> <a data-go="scales">Шкалы оценок</a> <svg class="ic"><use href="#i-chev"/></svg> <b>Стандартная A–E</b></div>
     <div class="head"><h1>Стандартная A–E</h1><div class="spacer"></div><button class="btn" data-go="scales">Отмена</button><button class="btn btn-pri"><svg class="ic"><use href="#i-check"/></svg> Сохранить</button></div>
 
     <div class="card">
@@ -509,7 +608,7 @@ input[disabled]{opacity:.5}
       <div class="step">
         <div class="rail"><div class="circ c-done"><svg class="ic"><use href="#i-check"/></svg></div><div class="vline"></div></div>
         <div class="body"><div class="ttl">Шаблон</div>
-          <select style="width:340px"><option>Шаблон X · Разработка</option><option>Шаблон Y · Продакты</option><option>Шаблон Z · Поддержка</option></select>
+          <select style="width:340px"><option>Шаблон X · Team Lead</option><option>Шаблон Y · Product Owner</option><option>Шаблон Z · HR &amp; Operations</option></select>
           <div class="tiny" style="margin-top:6px">содержание, этапы, шкала, премия и доступы берутся из шаблона</div>
         </div>
       </div>
@@ -524,7 +623,7 @@ input[disabled]{opacity:.5}
       </div>
       <div class="step">
         <div class="rail"><div class="circ c-wait">3</div><div class="vline"></div></div>
-        <div class="body"><div class="ttl">Период и источник 360</div>
+        <div class="body"><div class="ttl">Период и источник оценки 360</div>
           <div style="display:flex;gap:12px;flex-wrap:wrap">
             <div><div class="label">Период</div><input value="= период цикла" style="width:200px;margin-top:3px" /></div>
             <div><div class="label">Источник оценки 360</div><select style="width:200px;margin-top:3px"><option>360_h2_2026</option><option>360_annual_2026</option></select></div>
@@ -562,8 +661,46 @@ input[disabled]{opacity:.5}
 
   document.querySelectorAll('.cyc-h').forEach(function(h){ h.addEventListener('click', function(e){ if(e.target.closest('[data-go]')||e.target.closest('.kebab'))return; h.parentElement.classList.toggle('open'); }); });
 
-  document.querySelectorAll('.sw').forEach(function(s){ if(s.id==='bonus-sw')return; s.addEventListener('click', function(ev){ ev.stopPropagation(); var on=s.classList.toggle('sw-on'); s.classList.toggle('sw-off', !on); }); });
+  document.querySelectorAll('.sw').forEach(function(s){ if(s.id==='bonus-sw'||s.id==='rating-sw')return; s.addEventListener('click', function(ev){ ev.stopPropagation(); var on=s.classList.toggle('sw-on'); s.classList.toggle('sw-off', !on); }); });
 
+  var rsw=document.getElementById('rating-sw'), rcfg=document.getElementById('rating-cfg');
+  if(rsw){ rsw.addEventListener('click', function(){ var on=rsw.classList.toggle('sw-on'); rsw.classList.toggle('sw-off',!on); rcfg.style.display=on?'block':'none'; }); }
+
+  function updateWeights(){
+    var w1=parseInt(document.getElementById('w1').value)||0;
+    var w2=parseInt(document.getElementById('w2').value)||0;
+    var w3=parseInt(document.getElementById('w3').value)||0;
+    var sum=w1+w2+w3;
+    var row=document.getElementById('weight-sum-row');
+    var lbl=document.getElementById('weight-sum');
+    lbl.textContent=sum+'%';
+    if(sum===100){
+      row.style.background='var(--green-bg)';
+      row.querySelector('svg use').setAttribute('href','#i-check');
+      row.querySelector('span').style.color='var(--green-tx)';
+      row.querySelector('b').style.color='var(--green-tx)';
+    } else {
+      row.style.background='var(--amber-bg)';
+      row.querySelector('svg use').setAttribute('href','#i-info');
+      row.querySelector('span').style.color='var(--amber-tx)';
+      row.querySelector('b').style.color='var(--amber-tx)';
+    }
+  }
+  window.updateWeights=updateWeights;
+  function setResult(mode){
+    var pct=document.getElementById('ex-pct'), sum=document.getElementById('ex-sum');
+    var btnP=document.getElementById('res-pct'), btnS=document.getElementById('res-sum');
+    if(!pct||!sum) return;
+    pct.style.display=mode==='pct'?'block':'none';
+    sum.style.display=mode==='sum'?'block':'none';
+    btnP.style.background=mode==='pct'?'var(--bg-primary)':'transparent';
+    btnP.style.color=mode==='pct'?'var(--ink)':'var(--muted)';
+    btnP.style.fontWeight=mode==='pct'?'500':'400';
+    btnS.style.background=mode==='sum'?'var(--bg-primary)':'transparent';
+    btnS.style.color=mode==='sum'?'var(--ink)':'var(--muted)';
+    btnS.style.fontWeight=mode==='sum'?'500':'400';
+  }
+  window.setResult=setResult;
   var bsw=document.getElementById('bonus-sw'), bcfg=document.getElementById('bonus-cfg');
   if(bsw){ bsw.addEventListener('click', function(){ var on=bsw.classList.toggle('sw-on'); bsw.classList.toggle('sw-off', !on); bcfg.style.display=on?'block':'none'; }); }
 
